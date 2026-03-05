@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KGL – Pricing Settings</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+  <link rel="stylesheet" href="../CSS/pricing.css" />
+  <link rel="stylesheet" href="../CSS/layout.css" />
+
+    <link rel='stylesheet' href='../CSS/responsive.css' />
+</head>
+<body>
+  <div class="layout">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="logo">
+      <img src="../../images/logo/karibu-logo.png" alt="Karibu Logo" />
+    </div>
+
+    <ul class="nav_menu">
+      <li>
+        <a href="./managersDashboard.html">
+          <i class="fas fa-home"></i><span>Overview</span>
+        </a>
+      </li>
+      <li>
+        <a href="./managergosell.html">
+          <i class="fas fa-store"></i><span>Go Sell</span>
+        </a>
+      </li>
+      <li>
+        <a href="./managersProcurement.html">
+          <i class="fas fa-cart-plus"></i><span>Procurement</span>
+        </a>
+      </li>
+      <li>
+        <a href="./statistics.html">
+          <i class="fas fa-chart-bar"></i><span>Statistics</span>
+        </a>
+      </li>
+      <li>
+        <a href="./pricing.html" class="active">
+          <i class="fas fa-tags"></i><span>Pricing</span>
+        </a>
+      </li>
+      <li>
+        <a href="./usermanagement.html">
+          <i class="fas fa-users"></i><span>User Management</span>
+        </a>
+      </li>
+      <li>
+        <a href="./managersProfile.html">
+          <i class="fas fa-user"></i><span>Profile</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="logout-btn">
+          <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div>
+        <h2>Pricing Settings</h2>
+        <p class="branch-label" id="branchLabel">Loading branch…</p>
+      </div>
+    </div>
+
+    <!-- ALERT BANNER -->
+    <div class="pricing-alert hidden" id="alertBanner" role="alert"></div>
+
+    <!-- SUMMARY CARDS -->
+    <div class="cards">
+      <div class="card green">
+        <h3>Total Products</h3>
+        <h1 id="totalProducts">—</h1>
+        <p>In this branch</p>
+      </div>
+      <div class="card yellow">
+        <h3>Prices Set</h3>
+        <h1 id="pricesSet">—</h1>
+        <p>Ready for sales</p>
+      </div>
+      <div class="card darkgreen">
+        <h3>Prices Missing</h3>
+        <h1 id="pricesMissing">—</h1>
+        <p>Needs attention</p>
+      </div>
+    </div>
+
+    <!-- PRODUCT CARDS GRID -->
+    <div class="section-header">
+      <h3>Product Pricing</h3>
+      <span class="hint"><i class="fas fa-pencil-alt"></i> Click Edit to update a price</span>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <div class="loading-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading products…</p>
+      </div>
+    </div>
+
+  </main><!-- /.main-content -->
+
+  <script src="../JS/pricing.js"></script>
+  <script src="../JS/logout.js"></script>
+  </div>
+
+    <script src="../JS/apiConfig.js"></script>
+</body>
+</html>
+
+

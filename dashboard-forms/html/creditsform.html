@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credit Payment | Karibu</title>
+  <link rel="stylesheet" href="../CSS/creditsform.css">
+
+    <link rel='stylesheet' href='../CSS/responsive.css' />
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <!-- ── Header ─────────────────────────────────────────────────────────────── -->
+  <div class="form-header">
+    <img src="../../images/logo/karibu-icon.png" alt="Karibu">
+    <h1>Karibu</h1>
+    <h2>Credit Payment</h2>
+    <p>Look up a credit sale and record a customer payment</p>
+  </div>
+
+  <!-- ── Global alert banner ────────────────────────────────────────────────── -->
+  <div id="alert-box" class="alert hidden" role="alert"></div>
+
+  <!-- ── SECTION 1 · Search ─────────────────────────────────────────────────── -->
+  <div class="card" id="search-card">
+    <h3 class="card-title">Find Credit Sale</h3>
+    <div class="search-row">
+      <input
+        class="input"
+        type="text"
+        id="search-id"
+        placeholder="Enter Sale ID (MongoDB _id)"
+        autocomplete="off"
+      >
+      <button type="button" class="btn-primary" id="btn-search" onclick="searchCredit()">Search</button>
+    </div>
+    <p class="hint">You can find the Sale ID on the original credit receipt or the credit list.</p>
+  </div>
+
+  <!-- ── SECTION 2 · Sale Details (hidden until search succeeds) ───────────── -->
+  <div class="card hidden" id="details-card">
+    <div class="card-title-row">
+      <h3 class="card-title">Sale Details</h3>
+      <span class="badge" id="status-badge">pending</span>
+    </div>
+
+    <!-- Customer info -->
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Customer</span>
+        <span class="detail-value" id="d-customer">—</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">National ID</span>
+        <span class="detail-value" id="d-nin">—</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Phone</span>
+        <span class="detail-value" id="d-phone">—</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Location</span>
+        <span class="detail-value" id="d-location">—</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Product info -->
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Product</span>
+        <span class="detail-value" id="d-product">—</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Tonnage</span>
+        <span class="detail-value" id="d-tonnage">—</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Sale Date</span>
+        <span class="detail-value" id="d-date">—</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Due Date</span>
+        <span class="detail-value" id="d-duedate">—</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Balance summary -->
+    <div class="balance-row">
+      <div class="balance-item balance-total">
+        <span class="balance-label">Original Amount</span>
+        <span class="balance-value" id="d-original">—</span>
+      </div>
+      <div class="balance-item balance-paid">
+        <span class="balance-label">Total Paid</span>
+        <span class="balance-value" id="d-totalpaid">—</span>
+      </div>
+      <div class="balance-item balance-due">
+        <span class="balance-label">Balance Due</span>
+        <span class="balance-value" id="d-amountdue">—</span>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <p class="progress-label" id="progress-label"></p>
+
+    <!-- Payment history -->
+    <details class="history-toggle">
+      <summary>Payment History (<span id="history-count">0</span> entries)</summary>
+      <div class="table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Amount Paid</th>
+              <th>Recorded By</th>
+            </tr>
+          </thead>
+          <tbody id="history-body">
+            <tr><td colspan="4" class="no-data">No payments yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── SECTION 3 · Payment Form (hidden when sale is paid) ──────────────── -->
+  <div class="card hidden" id="payment-card">
+    <h3 class="card-title">Record Payment</h3>
+    <form id="payment-form" onsubmit="submitPayment(event)">
+
+      <div class="form-group">
+        <label for="payment-amount">Payment Amount (UGX)</label>
+        <input
+          class="input"
+          type="number"
+          id="payment-amount"
+          min="1"
+          step="1"
+          placeholder="Enter amount received"
+          required
+        >
+        <span class="field-hint" id="max-hint"></span>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" name="paymentMethod" value="Cash" checked> Cash
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="paymentMethod" value="Mobile Money"> Mobile Money
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="paymentMethod" value="Bank Transfer"> Bank Transfer
+          </label>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn-primary" id="btn-pay">Confirm Payment</button>
+        <button type="button" class="btn-secondary" onclick="resetPage()">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- ── SECTION 4 · Fully paid confirmation ──────────────────────────────── -->
+  <div class="card hidden" id="paid-card">
+    <div class="paid-banner">
+      <div class="paid-icon">&#10003;</div>
+      <h3>Credit Fully Settled</h3>
+      <p>This sale has been completely paid off. No further payments are due.</p>
+      <button type="button" class="btn-secondary" onclick="resetPage()">Search Another</button>
+    </div>
+  </div>
+
+</div><!-- /page-wrapper -->
+
+<script src="../JS/creditsform.js"></script>
+
+    <script src="../JS/apiConfig.js"></script>
+</body>
+</html>
+
+

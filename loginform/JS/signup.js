@@ -47,15 +47,15 @@ form.addEventListener("submit", function (event) {
             const role = UserDetails[i].role;
 
             if (role === "Agent") {
-                window.location.href = "/Dashbord forms/html/sellersDashboard.html";
+                window.location.href = "../../dashboard-forms/html/sellersDashboard.html";
                 break;
             } 
             else if (role === "Director") {
-                window.location.href = "/Dashbord forms/DirectorsDashboard/directorsDashboard.html";
+                window.location.href = "../../dashboard-forms/DirectorsDashboard/directorsDashboard.html";
                 break;
             } 
             else if (role === "Manager") {
-                window.location.href = "/Dashbord forms/html/managersDashboard.html";
+                window.location.href = "../../dashboard-forms/html/managersDashboard.html";
                 break;
             }
     

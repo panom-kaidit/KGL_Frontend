@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KGL Users profile</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../CSS/sellersDashboard.css">
+    <link rel="stylesheet" href="../CSS/profile.css">
+    <link rel="stylesheet" href="../CSS/layout.css">
+
+
+    <link rel='stylesheet' href='../CSS/responsive.css' />
+</head>
+<body>
+<div class="layout">
+     <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../../images/logo/karibu-logo.png" alt="Karibu Logo" />
+        </div>
+
+        <ul class="nav_menu">
+            <li>
+                <a href="./managersDashboard.html" >
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./managergosell.html" >
+                    <i class="fas fa-store"></i>
+                    <span>Go Sell</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./managersProcurement.html">
+                    <i class="fas fa-cart-plus"></i>
+                    <span>Procurement</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./statistics.html"
+                    ><i class="fas fa-chart-bar"></i><span>Statistics</span>
+                </a >
+            </li>
+            <li>
+                <a href="./pricing.html">
+                    <i class="fas fa-tags"></i>
+                    <span>Pricing</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./usermanagement.html" >
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./managersProfile.html" class="active">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- The main -->
+    <main class="main--content">
+  <div class="header--wrapper">
+    <div class="header--title">
+      <span>Seller</span>
+      <h2>Profile</h2>
+    </div>
+  </div>
+
+  <div class="profile--container">
+    <div class="profile--card">
+
+      <!-- Profile picture with change overlay -->
+      <div class="profile--avatar-wrapper" title="Click to change photo">
+        <img src="../../images/logo/karibu-icon.png" alt="Manager Photo">
+        <div class="avatar--overlay">
+          <i class="fas fa-camera"></i>
+        </div>
+      </div>
+      <label for="profile-pic-input" class="profile-pic-input--hidden">
+        <input type="file" id="profile-pic-input" accept="image/*" title="Change profile picture">
+      </label>
+
+      <h3>James Otto Ojo</h3>
+      <p class="role">Manager</p>
+
+      <div class="profile--info">
+        <p><strong>Branch:</strong> Kampala Main Branch</p>
+        <p><strong>Email:</strong> seller@karibu.com</p>
+        <p><strong>Phone:</strong> +256 700 000000</p>
+      </div>
+
+      <div class="profile--bio">
+        <h4>Bio</h4>
+        <p>This Manager has been working with Karibu for over 2 years and is responsible for daily sales and customer service.</p>
+        <button type="button" class="bio--edit-btn" id="bio-edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+
+        <div id="bio-edit-controls" class="bio--edit-controls--hidden">
+          <textarea class="bio--textarea" id="bio-textarea" placeholder="Write something about yourself..."></textarea>
+          <button type="button" class="bio--save-btn" id="bio-save-btn">Save</button>
+          <button type="button" class="bio--cancel-btn" id="bio-cancel-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="../JS/profile.js"></script>
+<script src="../JS/logout.js"></script>
+</div>
+
+    <script src="../JS/apiConfig.js"></script>
+</body>
+</html>
+
+

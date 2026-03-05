@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sellers Dashboard</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="../CSS/sellersDashboard.css" />
+    <link rel="stylesheet" href="../CSS/layout.css" />
+  
+    <link rel='stylesheet' href='../CSS/responsive.css' />
+</head>
+
+  <body>
+    <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="../../images/logo/karibu-logo.png" alt="Karibu Logo" />
+      </div>
+
+      <ul class="nav_menu">
+        <li>
+          <a href="#" class="active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="./profile.html" >
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="./goSell.html" >
+            <i class="fas fa-store"></i>
+            <span>Go Sell</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main--content">
+      <div class="header--wrapper">
+        <!-- Hamburger -->
+        <i class="fas fa-bars menu-toggle"></i>
+
+        <div class="header--title">
+          <span>Primary</span>
+          <h2>Dashboard</h2>
+        </div>
+
+        <div class="user--info">
+          <div class="search--box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" placeholder="Search" />
+          </div>
+          <img src="../../images/logo/karibu-icon.png" alt="User Icon" />
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="card--container">
+        <h3 class="main--title">Today's Summary</h3>
+
+        <div class="card--wrapper">
+          <div class="payment--card">
+            <div class="card--header">
+              <div class="amount">
+                <span class="title">Today's Sales</span>
+                <span class="amount--value">UGX 250,000</span>
+              </div>
+              <i class="fas fa-coins icon green"></i>
+            </div>
+            <span class="card-detail">Sales made today</span>
+          </div>
+
+          <div class="payment--card">
+            <div class="card--header">
+              <div class="amount">
+                <span class="title">Customers Served</span>
+                <span class="amount--value">18</span>
+              </div>
+              <i class="fas fa-users icon blue"></i>
+            </div>
+            <span class="card-detail">Total customers today</span>
+          </div>
+
+          <div class="payment--card">
+            <div class="card--header">
+              <div class="amount">
+                <span class="title">Weekly Customers</span>
+                <span class="amount--value">84</span>
+              </div>
+              <i class="fas fa-users icon blue"></i>
+            </div>
+            <span class="card-detail">This week so far</span>
+          </div>
+
+          <div class="payment--card">
+            <div class="card--header">
+              <div class="amount">
+                <span class="title">Weekly Sales</span>
+                <span class="amount--value">UGX 1,450,000</span>
+              </div>
+              <i class="fas fa-chart-line icon orange"></i>
+            </div>
+            <span class="card-detail">This week</span>
+          </div>
+
+          <div class="payment--card">
+            <div class="card--header">
+              <div class="amount">
+                <span class="title">Best Day</span>
+                <span class="amount--value">Friday</span>
+              </div>
+              <i class="fas fa-star icon purple"></i>
+            </div>
+            <span class="card-detail">UGX 420,000 sales</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- JS -->
+    <script src="../JS/salesDashboard.js"></script>
+    <script src="../JS/logout.js"></script>
+    </div>
+  
+    <script src="../JS/apiConfig.js"></script>
+</body>
+</html>
+
+

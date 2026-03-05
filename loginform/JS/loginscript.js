@@ -65,11 +65,11 @@ form.addEventListener("submit", async function (event) {
 
         // Redirect based on user role
         if (userRole === "Sales-agent") {
-            window.location.href = "/Dashbord forms/html/sellersDashboard.html";
+            window.location.href = "../../dashboard-forms/html/sellersDashboard.html";
         } else if (userRole === "Manager") {
-            window.location.href = "/Dashbord forms/html/managersDashboard.html";
+            window.location.href = "../../dashboard-forms/html/managersDashboard.html";
         } else if (userRole === "Director") {
-            window.location.href = "/Dashbord forms/DirectorsDashboard/directorsDashboard.html";
+            window.location.href = "../../dashboard-forms/DirectorsDashboard/directorsDashboard.html";
         } else {
             alert("Unknown user role: " + userRole + ". Please contact support.");
             console.error("Unknown role:", userRole);
@@ -78,7 +78,7 @@ form.addEventListener("submit", async function (event) {
 
         // If backend returns ONLY token:
         // For now redirect to a general dashboard
-        // window.location.href = "/Dashbord forms/html/dashboard.html";
+        // window.location.href = "../../dashboard-forms/html/dashboard.html";
 
     } catch (error) {
         console.error("Error:", error);

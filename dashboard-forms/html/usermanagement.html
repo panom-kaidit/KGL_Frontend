@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | Karibu</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../CSS/managersDashboard.css">
+    <link rel="stylesheet" href="../CSS/usermanagement.css">
+    <link rel="stylesheet" href="../CSS/layout.css">
+
+    <link rel='stylesheet' href='../CSS/responsive.css' />
+</head>
+<body>
+    <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../../images/logo/karibu-logo.png" alt="Karibu Logo" />
+        </div>
+
+        <ul class="nav_menu">
+            <li>
+                <a href="./managersDashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+            </li>
+            <li>
+                <a href="./managergosell.html" >
+                    <i class="fas fa-store"></i>
+                    <span>Go Sell</span>
+                </a>
+            </li>
+            <li>
+                <a href="./managersProcurement.html">
+                    <i class="fas fa-cart-plus"></i>
+                    <span>Procurement</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="./statistics.html" ><i class="fas fa-chart-bar"></i><span>Statistics</span>
+                </a >
+            </li>
+            <li>
+                <a href="./pricing.html">
+                    <i class="fas fa-tags"></i>
+                    <span>Pricing</span>
+                </a>
+            </li>
+            <li>
+                <a href="./usermanagement.html" class="active">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+            <li>
+                <a href="./managersProfile.html">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="content">
+
+        <!-- Page header -->
+        <div class="header um-header">
+            <div>
+                <h1>User Management</h1>
+                <p id="branch-label">Loading branch users…</p>
+            </div>
+            <a href="./addUser.html" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Add User
+            </a>
+        </div>
+
+        <!-- Alert banner -->
+        <div id="alert-box" class="um-alert hidden" role="alert"></div>
+
+        <!-- Search & sort controls -->
+        <div class="controls-bar">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search by name, email or role…"
+                    autocomplete="off"
+                >
+                <button type="button" id="clearSearch" class="clear-btn" aria-label="Clear search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="sort-wrapper">
+                <span class="sort-label">Sort:</span>
+                <button type="button" id="sortAZ" class="sort-btn active" data-sort="az">
+                    <i class="fas fa-sort-alpha-down"></i> A–Z
+                </button>
+                <button type="button" id="sortZA" class="sort-btn" data-sort="za">
+                    <i class="fas fa-sort-alpha-up"></i> Z–A
+                </button>
+            </div>
+        </div>
+        <p id="resultCount" class="result-count"></p>
+
+        <!-- Users table -->
+        <div class="table-container">
+            <table class="procurement-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Branch</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr class="loading-row">
+                        <td colspan="6" class="text-center">
+                            <i class="fas fa-spinner fa-spin"></i>&nbsp; Loading users…
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty state -->
+        <div id="noResultsMessage" class="no-results" style="display:none;">
+            <i class="fas fa-users-slash"></i>
+            <h3>No users found</h3>
+            <p>No users match your search in this branch.</p>
+        </div>
+
+    </main>
+
+    <script src="../JS/usermanagement.js"></script>
+    <script src="../JS/logout.js"></script>
+</div>
+
+    <script src="../JS/apiConfig.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Form</title>
+    <link rel="stylesheet" href="../CSS/salesform.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  
+    <link rel='stylesheet' href='../CSS/responsive.css' />
+</head>
+
+  <body>
+    <div class="login-container">
+      <!-- Header -->
+      <div class="form-header">
+        <img src="../../images/logo/karibu-icon.png" alt="Karibu icon" />
+        <h1>Karibu</h1>
+        <h2>Sales Form</h2>
+        <p>Please enter sale details</p>
+      </div>
+
+      <!-- ===== SALE TYPE SELECTOR (NEW TOP SECTION) ===== -->
+      <div class="form-box" style="margin-bottom: 15px">
+        <label><strong>Select Sale Type</strong></label>
+        <div class="remember">
+          <label
+            ><input
+              type="radio"
+              name="sale_type"
+              checked
+              onclick="showForm('cash')"
+            />
+            Cash Sale</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="sale_type"
+              onclick="showForm('credit')"
+            />
+            Credit Sale</label
+          >
+        </div>
+      </div>
+
+      <!-- Cash Form -->
+      <form class="form-box" id="cash-form">
+        <!-- Sale Info -->
+        <div class="form-group">
+          <label for="sale-id">Sale ID / Receipt Number</label>
+          <input
+            class="input"
+            type="text"
+            id="sale-id"
+            placeholder="Receipt number"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="sale-date">Sale Date</label>
+          <input class="input" type="date" id="sale-date" required />
+        </div>
+
+        <div class="form-group">
+          <label for="customer-name">Customer Name</label>
+          <input
+            class="input"
+            type="text"
+            id="customer-name"
+            placeholder="Customer name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="customer-phone">Customer Phone</label>
+          <input
+            class="input"
+            type="tel"
+            id="customer-phone"
+            placeholder="Phone number"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="cash-sales-agent">Sales Agent Name</label>
+          <input
+            class="input"
+            type="text"
+            id="cash-sales-agent"
+            readonly
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="product-name">Product Name</label>
+          <select class="input" id="product-name">
+            <option value="">-- Select Product --</option>
+            <option>Maize grain</option>
+            <option>Beans</option>
+            <option>Cow peas</option>
+            <option>G-nuts</option>
+            <option>Soybeans</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="product-category">Product Category</label>
+          <input
+            class="input"
+            type="text"
+            id="product-category"
+            value="Cereal"
+            readonly
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantity Sold</label>
+          <input class="input" type="number" id="quantity" />
+        </div>
+
+        <div class="form-group">
+          <label for="unit-price">Unit Price</label>
+          <input class="input" type="number" step="0.01" id="unit-price" />
+        </div>
+
+        <div class="form-group" style="grid-column: span 2">
+          <button class="add-btn" type="button" onclick="addProduct()">
+            <i class="fa-solid fa-cart-plus"></i>
+            <span>Add Product</span>
+          </button>
+        </div>
+
+        <div class="form-group" style="grid-column: span 2">
+          <table width="100%" border="1" cellpadding="8" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="product-list"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4"><strong>Grand Total</strong></td>
+                <td colspan="2"><strong id="grand-total">0</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="submit-btn">
+          <button type="submit">Submit Sale</button>
+        </div>
+      </form>
+
+      <!-- Credit form-->
+      <form class="form-box" id="credit-form" style="display: none">
+        <div class="form-group">
+          <label>Buyer Name</label>
+          <input
+            class="input"
+            type="text"
+            required
+            pattern="[A-Za-z0-9 ]{2,}"
+            id="buyer-name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>National ID (NIN)</label>
+          <input class="input" type="text" required pattern="[A-Z0-9]{8,14}" id="national-id" />
+        </div>
+
+        <div class="form-group">
+          <label>Location</label>
+          <input
+            class="input"
+            type="text"
+            required
+            pattern="[A-Za-z0-9 ]{2,}"
+            id="credit-location"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Contacts</label>
+          <input class="input" type="tel" required pattern="[0-9+ ]{9,15}" id="credit-contacts" />
+        </div>
+
+        <div class="form-group">
+          <label>Amount Due (UGX)</label>
+          <input class="input" type="number" required min="10000" id="amount-due" />
+        </div>
+
+        <div class="form-group">
+          <label>Sales Agent Name</label>
+          <input class="input" type="text" required id="credit-sales-agent" />
+        </div>
+
+        <div class="form-group">
+          <label>Due Date</label>
+          <input class="input" type="date" required id="credit-due-date" />
+        </div>
+
+        <div class="form-group">
+          <label>Produce Name</label>
+          <input class="input" type="text" id="produce-name-credit" />
+        </div>
+
+        <div class="form-group">
+          <label>Produce Type</label>
+          <input class="input" type="text" id="produce-type-credit" />
+        </div>
+
+        <div class="form-group">
+          <label>Tonnage</label>
+          <input class="input" type="number" id="credit-tonnage" />
+        </div>
+
+        <div class="form-group">
+          <label>Unit Price</label>
+          <input class="input" type="number" step="0.01" id="credit-unit-price" />
+        </div>
+
+        <div class="form-group">
+          <label>Dispatch Date</label>
+          <input class="input" type="date" required id="dispatch-date" />
+        </div>
+        <div class="form-group" style="grid-column: span 2">
+          <button class="add-btn" type="button" onclick="addProductCredit()">
+            <i class="fa-solid fa-cart-plus"></i>
+            <span>Add Product</span>
+          </button>
+        </div>
+
+        <div class="form-group" style="grid-column: span 2">
+          <table width="100%" border="1" cellpadding="8" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="credit-product-list"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4"><strong>Grand Total</strong></td>
+                <td colspan="2"><strong id="credit-grand-total">0</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="submit-btn">
+          <button type="submit">Submit Credit Sale</button>
+        </div>
+      </form>
+    </div>
+
+    <script src="../JS/Salesform.js"></script>
+  
+    <script src="../JS/apiConfig.js"></script>
+</body>
+</html>
+
+

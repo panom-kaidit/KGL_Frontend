@@ -83,12 +83,12 @@ button:hover {
 
 @keyframes bgSlide {
   0% {
-    background-image: url("/images/Borcelle\ \(2\).jpg");
+    background-image: url("images/Borcelle\ \(2\).jpg");
   }
   50% {
-    background-image: url("/images/just.jpg");
+    background-image: url("images/just.jpg");
   }
   100% {
-    background-image: url("/images/Borcelle\ \(2\).jpg");
+    background-image: url("images/Borcelle\ \(2\).jpg");
   }
 }
