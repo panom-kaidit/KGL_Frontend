@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add User | Karibu</title>
+  <link rel="stylesheet" href="/Dashbord forms/CSS/salesform.css">
+  <style>
+    /* Alert banner */
+    .au-alert { padding: 11px 14px; border-radius: 7px; font-size: 14px;
+                margin-bottom: 14px; grid-column: span 2; }
+    .au-alert.hidden  { display: none; }
+    .au-alert.success { background: #e8f5e9; border: 1px solid #a5d6a7; color: #1B5E20; }
+    .au-alert.error   { background: #fdecea; border: 1px solid #f5c6c6; color: #b71c1c; }
+
+    /* Back link */
+    .back-link { display: block; text-align: center; color: #1B5E20;
+                 font-size: 14px; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+
+    <link rel='stylesheet' href='/Dashbord forms/CSS/responsive.css' />
+</head>
+<body>
+
+  <div class="login-container">
+
+    <!-- Header -->
+    <div class="form-header">
+      <img src="/images/logo/karibu icon.png" alt="Karibu">
+      <h1>Karibu</h1>
+      <h2>Add New User</h2>
+      <p>Register a new staff member to the system</p>
+    </div>
+
+    <!-- Alert banner -->
+    <div id="alert-box" class="au-alert hidden" role="alert"></div>
+
+    <!-- Registration form -->
+    <form class="form-box" id="addUserForm">
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input class="input" type="text" id="name" placeholder="Full name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input class="input" type="email" id="email" placeholder="email@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input class="input" type="password" id="password" placeholder="Set a password" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input class="input" type="tel" id="phone" placeholder="+256 â€¦">
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select class="input" id="role" required>
+          <option value="" disabled selected>Select role</option>
+          <option value="Manager">Manager</option>
+          <option value="Sales-agent">Sales-agent</option>
+          <option value="Director">Director</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="branch">Branch</label>
+        <select class="input" id="branch">
+          <option value="" disabled selected>Select branch</option>
+          <option value="Maganjo">Maganjo</option>
+          <option value="Matugga">Matugga</option>
+        </select>
+      </div>
+
+      <div class="form-group submit-btn">
+        <button type="submit" id="submit-btn">Register User</button>
+      </div>
+
+      <div class="form-group submit-btn">
+        <a href="/Dashbord forms/html/usermanagement.html" class="back-link">
+          &#8592; Back to User Management
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+
+  <script src="/Dashbord forms/JS/addUser.js"></script>
+
+    <script src="/Dashbord forms/JS/apiConfig.js"></script>
+</body>
+</html>
+
+

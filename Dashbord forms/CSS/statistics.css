@@ -1,0 +1,54 @@
+/* =========================================
+   STATISTICS PAGE STYLES
+   Beginner Friendly: These styles control the layout of the charts
+========================================= */
+
+/* Main container for the statistics section */
+.stats--container {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Wrapper to hold the charts in a grid */
+.charts--wrapper {
+    display: grid;
+    /* 'repeat(auto-fit...)' automatically arranges columns based on available width */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px; /* Space between the charts */
+    margin-bottom: 30px;
+}
+
+/* Individual Card style for each chart */
+.chart--card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    /* A soft shadow to make it pop */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eeeeee;
+}
+
+/* Special class to make the yearly chart take the full width */
+.chart--card.full-width {
+    grid-column: 1 / -1; /* Spans from the first to the last column */
+}
+
+/* Headings for the charts */
+.chart--card h3 {
+    color: #1B5E20; /* Matching the Karibu Green */
+    margin-bottom: 15px;
+    font-size: 18px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+/* Ensure the canvas (the actual chart) is responsive */
+.chart--card canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* ================= MOBILE RESPONSIVENESS ================= */
+/* Adjustments for tablets and phones */
+
+

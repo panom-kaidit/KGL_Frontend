@@ -1,0 +1,209 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+   PAGE CENTERING
+========================= */
+body {
+    min-height: 100vh;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+.login-container {
+    width: 650px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================
+   HEADER
+========================= */
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-header img {
+    width: 60px;
+    margin-bottom: 10px;
+}
+.form-header h1 {
+    color: #1B5E20;
+    margin-bottom: 5px;
+}
+
+.form-header h2 {
+    font-size: 16px;
+    color: #555;
+}
+
+.form-header p {
+    font-size: 14px;
+    color: #777;
+}
+
+/* =========================
+   FORM LAYOUT (2 COLUMNS)
+========================= */
+.form-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+/* =========================
+   FORM GROUPS
+========================= */
+.form-group label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+
+.select option{
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+/* =========================
+   RADIO (PAYMENT METHOD)
+========================= */
+.remember {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+}
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+.submit-btn {
+    grid-column: span 2;
+}
+
+.submit-btn button {
+    width: 100%;
+    padding: 10px;
+    background: #144d18;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submit-btn button:hover {
+    background: #1B5E20;
+
+}
+
+/* =========================
+   ADD PRODUCT BUTTON 
+========================= */
+.add-btn {
+    background: #144d18;
+    color: #ffffff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+/* Center Add Product button */
+.add-btn {
+    display: block;
+    margin: 0 auto;
+}
+
+
+.add-btn:hover {
+    background: #1B5E20;
+}
+
+/* =========================
+   REMOVE PRODUCT BUTTON
+========================= */
+.btn-remove {
+    background: #ed8804;
+    color: #ffffff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-remove:hover {
+    background: #b71c1c;
+}
+
+/* =========================
+   PRODUCT TABLE STYLING
+========================= */
+table {
+    border-collapse: collapse;
+    border: 1px solid #1B5E20;
+    font-size: 13px;
+}
+
+/* Table Header */
+thead th {
+    background: #1B5E20;
+    color: #ffffff;
+    border: 1px solid #1B5E20;
+    text-align: left;
+}
+
+/* Table Body */
+tbody td {
+    border: 1px solid #c8e6c9;
+}
+
+/* Table Footer */
+tfoot td {
+    background: #e8f5e9;
+    border: 1px solid #1B5E20;
+}
+
+/* Row hover effect (optional but nice) */
+tbody tr:hover {
+    background: #f1f8f4;
+}
+
+
+/* =========================
+   RESPONSIVE (MOBILE)
+========================= */
+
+
+/* Extra responsive fix */
+
+

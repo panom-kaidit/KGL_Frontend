@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Branch & Role</title>
+    <link rel="stylesheet" href="/signup forms/css/branchselect.css">
+
+    <link rel='stylesheet' href='/Dashbord forms/CSS/responsive.css' />
+</head>
+<body>
+
+<div class="select-container">
+    <h2>Welcome</h2>
+    <p>Please select your branch and role</p>
+
+    <form action="/password/html.files/settingpasscode.html" method="GET">
+
+        <!-- Branch Selection -->
+        <fieldset>
+            <legend>Branch</legend>
+
+            <label>
+                <input type="radio" name="branch" value="Branch A" required>
+                Branch A
+            </label>
+
+            <label>
+                <input type="radio" name="branch" value="Branch B">
+                Branch B
+            </label>
+        </fieldset>
+
+        <!-- Role Selection -->
+        <fieldset>
+            <legend>Employment Status</legend>
+
+            <label>
+                <input type="radio" name="role" value="Manager" required>
+                Manager
+            </label>
+
+            <label>
+                <input type="radio" name="role" value="Director">
+                Director
+            </label>
+
+            <label>
+                <input type="radio" name="role" value="Supplier">
+                Supplier
+            </label>
+
+            <label>
+                <input type="radio" name="role" value="Sales Agent">
+                Sales Agent
+            </label>
+        </fieldset>
+
+        <button type="submit">Next</button>
+    </form>
+</div>
+
+</body>
+</html>
+

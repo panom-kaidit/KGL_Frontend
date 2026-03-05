@@ -1,0 +1,134 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Page center */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+}
+
+/* Main container */
+.login-container {
+    width: 350px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    /* flex-wrap: wrap; */
+}
+
+/* Header */
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-header img {
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+.form-header h1 {
+    color: #1B5E20;
+}
+
+.form-header h2 {
+    font-size: 16px;
+    color: #555;
+}
+
+.form-header p {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Form */
+.form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+
+/* Remember section */
+.remember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+[type="checkbox"]{
+    background-color: #1B5E20;
+}
+.remember a {
+    text-decoration: none;
+    color: #1B5E20;
+}
+
+/* Button */
+.submit-btn{
+    width: 100%;
+    padding: 10px;
+    background: #144d18;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submit-btn {
+    display: block;
+    text-align: center;
+    background: #144d18;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.submit-btn:hover {
+    background: #1B5E20;
+}
+
+.submit-btn :hover {
+    background: #1B5E20;
+
+}
+
+/* Signup */
+.signup-link {
+    text-align: center;
+    font-size: 13px;
+}
+
+.signup-link a {
+    color: #1B5E20;
+    text-decoration: none;
+}

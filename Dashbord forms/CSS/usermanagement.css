@@ -1,0 +1,339 @@
+/* ============================================================
+   usermanagement.css — User Management Dashboard
+   Extends managersDashboard.css (sidebar) with page-specific
+   styles for the user-list table, search bar, and role badges.
+   ============================================================ */
+
+/* ── Main content area ──────────────────────────────────────── */
+/* Use the shared layout content container so only main content scrolls */
+.layout > .content {
+  flex: 1;
+  padding: 30px 28px;
+  max-width: 1300px;
+  overflow-x: hidden;
+}
+
+/* ── Page header row ────────────────────────────────────────── */
+.um-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.um-header h1 {
+  font-size: 26px;
+  color: #1B5E20;
+  margin-bottom: 4px;
+}
+
+.um-header p {
+  font-size: 13px;
+  color: #777;
+}
+
+/* ── Add User button ────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-primary {
+  background: #1B5E20;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #144d18;
+  transform: translateY(-2px);
+}
+
+/* ── Alert banner ───────────────────────────────────────────── */
+.um-alert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.um-alert.hidden {
+  display: none;
+}
+
+.um-alert.success {
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  color: #1B5E20;
+}
+
+.um-alert.error {
+  background: #fdecea;
+  border: 1px solid #f5c6c6;
+  color: #b71c1c;
+}
+
+/* ── Search & sort controls bar ─────────────────────────────── */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 34px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #1B5E20;
+  box-shadow: 0 0 0 2px rgba(27, 94, 32, 0.1);
+}
+
+.clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  display: none;
+}
+
+.clear-btn:hover {
+  color: #555;
+}
+
+.sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sort-label {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.sort-btn {
+  padding: 9px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s;
+}
+
+.sort-btn:hover {
+  border-color: #1B5E20;
+  color: #1B5E20;
+}
+
+.sort-btn.active {
+  background: #1B5E20;
+  color: #fff;
+  border-color: #1B5E20;
+}
+
+/* ── Result count ───────────────────────────────────────────── */
+.result-count {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+  min-height: 18px;
+}
+
+/* ── Table container ────────────────────────────────────────── */
+.table-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+/* ── Users table ────────────────────────────────────────────── */
+.procurement-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.procurement-table thead {
+  background: #1B5E20;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.procurement-table thead th {
+  padding: 14px 14px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.procurement-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+
+.procurement-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.procurement-table tbody tr:hover {
+  background: #f6fbf6;
+}
+
+.procurement-table tbody td {
+  padding: 13px 14px;
+  color: #333;
+  vertical-align: middle;
+}
+
+.procurement-table tbody tr.loading-row td {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ── Row number ─────────────────────────────────────────────── */
+.row-num {
+  color: #bbb;
+  font-size: 12px;
+  min-width: 28px;
+}
+
+/* ── Avatar + name cell ─────────────────────────────────────── */
+.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1B5E20;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+/* ── Role badge ─────────────────────────────────────────────── */
+.role-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.role-manager     { background: #e8f5e9; color: #1B5E20; }
+.role-sales-agent { background: #fff3e0; color: #e65100; }
+.role-director    { background: #ede7f6; color: #4527a0; }
+.role-default     { background: #f5f5f5; color: #555; }
+
+/* ── Branch badge ───────────────────────────────────────────── */
+.branch-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: #e3f2fd;
+  color: #0d47a1;
+  white-space: nowrap;
+}
+
+/* ── Empty / no-results state ───────────────────────────────── */
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.no-results i {
+  font-size: 48px;
+  color: #ddd;
+  margin-bottom: 18px;
+}
+
+.no-results h3 {
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.no-results p {
+  color: #999;
+  font-size: 14px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+
+
+
+

@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procurement Form</title>
+    <!-- font awosome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <!-- Styles -->
+    <link rel="stylesheet" href="/Dashbord forms/CSS/procurementform.css">
+    <link rel="stylesheet" href="/Dashbord forms/CSS/managersDashboard.css">
+    <link rel="stylesheet" href="/Dashbord forms/CSS/sellersDashboard.css">
+    <link rel="stylesheet" href="/Dashbord forms/CSS/layout.css">
+
+    <link rel='stylesheet' href='/Dashbord forms/CSS/responsive.css' />
+</head>
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="/images/logo/karibu logo.png" alt="Karibu Logo" />
+        </div>
+
+        <ul class="nav_menu">
+            <li>
+                <a href="/Dashbord forms/html/managersDashboard.html" >
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Dashbord forms/html/managergosell.html" >
+                    <i class="fas fa-store"></i>
+                    <span>Go Sell</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="" class="active">
+                    <i class="fas fa-cart-plus"></i>
+                    <span>Procurement</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Dashbord forms/html/statistics.html"
+                    ><i class="fas fa-chart-bar"></i><span>Statistics</span>
+                </a >
+            </li>
+
+            <li>
+                <a href="/Dashbord forms/html/pricing.html">
+                    <i class="fas fa-tags"></i>
+                    <span>Pricing</span>
+                </a>
+            </li>
+            <li>
+                <a href="/Dashbord forms/html/usermanagement.html" >
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/Dashbord forms/html/managersProfile.html">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+        <div class="header">
+            <h1>Procurement Management</h1>
+            <p>View and manage procurements for your branch</p>
+        </div>
+
+        <!-- Add New Procurement Button -->
+        <div class="action-bar">
+            <a href="/Dashbord forms/html/procurementform.html" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Procurement
+            </a>
+        </div>
+
+        <!-- Search and Sort Controls -->
+        <div class="controls-bar">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search by produce, type, dealer, contactâ€¦"
+                >
+                <button type="button" id="clearSearch" class="clear-btn" aria-label="Clear search">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sort-wrapper">
+                <span class="sort-label">Sort by Date:</span>
+                <button type="button" id="sortDesc" class="sort-btn active">
+                    <i class="fas fa-arrow-down"></i> Newest
+                </button>
+                <button type="button" id="sortAsc" class="sort-btn">
+                    <i class="fas fa-arrow-up"></i> Oldest
+                </button>
+            </div>
+        </div>
+        <p id="resultCount" class="result-count"></p>
+
+        <!-- Procurement Table -->
+        <div class="table-container">
+            <table class="procurement-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Produce Name</th>
+                        <th>Type</th>
+                        <th>Tonnage (kg)</th>
+                        <th>Cost (UgX)</th>
+                        <th>Selling Price (UgX)</th>
+                        <th>Dealer Name</th>
+                        <th>Contact</th>
+                        <th>Branch</th>
+                        <th>Recorded By</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="procurementTableBody">
+                    <tr class="loading-row">
+                        <td colspan="12" class="text-center">Loading procurements...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResultsMessage" class="no-results" style="display: none;">
+            <i class="fas fa-inbox"></i>
+            <h3>No procurements found</h3>
+            <p>There are no procurement records for your branch yet.</p>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="/Dashbord forms/JS/managersProcurement.js"></script>
+    <script src="/Dashbord forms/JS/logout.js"></script>
+</div>
+
+    <script src="/Dashbord forms/JS/apiConfig.js"></script>
+</body>
+</html>
+
+

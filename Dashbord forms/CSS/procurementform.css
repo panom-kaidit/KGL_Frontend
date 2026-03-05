@@ -1,0 +1,445 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Page center */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f5f5;
+}
+
+/* Main container */
+.login-container {
+    width: 350px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-header img {
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+
+.form-header h1 {
+    color: #1B5E20;
+}
+
+.form-header h2 {
+    font-size: 16px;
+    color: #555;
+}
+
+.form-header p {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Form */
+.form-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+
+/* Wider container for two columns */
+.login-container {
+    width: 650px;
+}
+
+/* Two-column layout */
+.form-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+/* Make header and button span full width */
+.form-header,
+.submit-btn {
+    grid-column: span 2;
+}
+
+/* Payment status full width */
+.form-group:last-of-type {
+    grid-column: span 2;
+}
+
+
+
+/* Remember section */
+.remember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.remember a {
+    text-decoration: none;
+    color: #1B5E20;
+}
+
+/* Button */
+.submit-btn button {
+    width: 100%;
+    padding: 10px;
+    background: #144d18;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.submit-btn button:hover {
+    background: #1B5E20;
+
+}
+
+/* Signup */
+.signup-link {
+    text-align: center;
+    font-size: 13px;
+}
+
+.signup-link a {
+    color: #1B5E20;
+    text-decoration: none;
+}
+
+/* Responsive: single column on small screens */
+
+
+/* Extra fix for very small screens */
+
+
+/* ===== SEARCH & SORT CONTROLS ===== */
+
+.controls-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 220px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 9px 34px 9px 34px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: #1B5E20;
+}
+
+.clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 2px 4px;
+    display: none;
+}
+
+.clear-btn:hover {
+    color: #555;
+}
+
+.sort-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.sort-label {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+}
+
+.sort-btn {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+
+.sort-btn:hover {
+    border-color: #1B5E20;
+    color: #1B5E20;
+}
+
+.sort-btn.active {
+    background: #1B5E20;
+    color: #fff;
+    border-color: #1B5E20;
+}
+
+.result-count {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 8px;
+    min-height: 18px;
+}
+
+/* ===== PROCUREMENT TABLE STYLES ===== */
+
+/* Main content area */
+main {
+    padding: 30px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #1B5E20;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Action bar */
+.action-bar {
+    margin-bottom: 30px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #1B5E20;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #145a1a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(27, 94, 32, 0.3);
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+/* Table container */
+.table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.procurement-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.procurement-table thead {
+    background: #1B5E20;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.procurement-table thead th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.procurement-table tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+.procurement-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.procurement-table tbody td {
+    padding: 12px 12px;
+    color: #333;
+}
+
+.procurement-table tbody tr.loading-row td,
+.procurement-table tbody tr.error-row td {
+    text-align: center;
+    color: #999;
+    padding: 30px 12px;
+}
+
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.badge.branch {
+    background: #e8f5e9;
+    color: #1B5E20;
+}
+
+.badge.status-today {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.badge.status-upcoming {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge.status-past {
+    background: #fce4ec;
+    color: #c2185b;
+}
+
+/* Text utilities */
+.text-center {
+    text-align: center;
+}
+
+/* No results message */
+.no-results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-results i {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.no-results h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.no-results p {
+    color: #999;
+    font-size: 14px;
+}
+
+/* Responsive design */
+
+
+
+
+/* user management message styles */
+.no-results.success {
+    background: #e8f5e9;
+    color: #1B5E20;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.no-results.error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    justify-content: center;
+}

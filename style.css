@@ -1,0 +1,94 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+   PAGE CENTERING
+========================= */
+body {
+    min-height: 100vh;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    animation: bgSlide 10s infinite alternate;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* =========================
+   FORM CONTAINER
+========================= */
+form {
+    background: transparent;
+    padding: 40px 30px;
+    width: 350px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================
+   HEADINGS
+========================= */
+h1 {
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+/* h2 {
+    font-size: 16px;
+    color: #ffffff;
+    margin-top: 10px;
+} */
+
+/* =========================
+   LOGO
+========================= */
+img {
+    width: 250px;
+    height: auto;
+    margin: 15px 0;
+}
+
+/* =========================
+   BUTTON
+========================= */
+button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 12px;
+    background: #144d18;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1B5E20;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@keyframes bgSlide {
+  0% {
+    background-image: url("/images/Borcelle\ \(2\).jpg");
+  }
+  50% {
+    background-image: url("/images/just.jpg");
+  }
+  100% {
+    background-image: url("/images/Borcelle\ \(2\).jpg");
+  }
+}

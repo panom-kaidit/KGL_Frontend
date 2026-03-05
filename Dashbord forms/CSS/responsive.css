@@ -1,0 +1,250 @@
+/*
+  Global Responsive Styles
+  One shared file for mobile, tablet, and small laptop screens.
+*/
+
+/* Base safety rules */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Shared containers should never overflow */
+.layout,
+.main-content,
+.main--content,
+.content,
+.table-container,
+.form-container,
+.profile--container,
+.card--container,
+.cards,
+.charts--wrapper,
+.sell--container,
+.sales--history {
+  min-width: 0;
+}
+
+/* Tables: allow horizontal scroll on small screens */
+.table-container,
+.table-responsive,
+.stats-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  min-width: 640px;
+}
+
+/* Forms: default responsive behavior */
+form,
+.form-grid,
+.form-row,
+.filters,
+.controls-bar,
+.sort-wrapper,
+.search-wrapper,
+.type-filter-bar,
+.action-bar {
+  width: 100%;
+}
+
+input,
+select,
+textarea,
+button,
+.btn,
+.btn-primary,
+.btn-secondary,
+.sell-form {
+  max-width: 100%;
+}
+
+/* ------------------------------
+   Small Laptop: <= 1024px
+--------------------------------- */
+@media (max-width: 1024px) {
+  .layout .sidebar {
+    width: 200px;
+    padding: 16px;
+  }
+
+  .layout > .content,
+  .layout > .main-content,
+  .layout > .main--content,
+  .layout > main {
+    margin-left: 200px;
+    width: calc(100% - 200px);
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .cards,
+  .card--wrapper,
+  .charts--wrapper,
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .top-bar,
+  .header--wrapper,
+  .um-header {
+    gap: 10px;
+  }
+}
+
+/* ------------------------------
+   Tablet: <= 768px
+--------------------------------- */
+@media (max-width: 768px) {
+  /* Sidebar becomes compact but still fixed */
+  .layout .sidebar {
+    width: 84px;
+    padding: 12px 8px;
+  }
+
+  .layout .logo img {
+    width: 52px;
+  }
+
+  .layout .nav_menu a {
+    justify-content: center;
+    gap: 0;
+    padding: 10px 8px;
+  }
+
+  .layout .nav_menu span {
+    display: none;
+  }
+
+  .layout > .content,
+  .layout > .main-content,
+  .layout > .main--content,
+  .layout > main {
+    margin-left: 84px;
+    width: calc(100% - 84px);
+    padding: 14px;
+  }
+
+  .top-bar,
+  .header--wrapper,
+  .user--info,
+  .controls-bar,
+  .type-filter-bar,
+  .filters,
+  .um-header,
+  .action-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .cards,
+  .card--wrapper,
+  .charts--wrapper,
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  form,
+  .form-grid,
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  input,
+  select,
+  textarea,
+  button,
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .sell-form {
+    width: 100%;
+  }
+
+  table {
+    font-size: 13px;
+  }
+}
+
+/* ------------------------------
+   Mobile: <= 480px
+--------------------------------- */
+@media (max-width: 480px) {
+  /* Very small fixed sidebar */
+  .layout .sidebar {
+    width: 68px;
+    padding: 10px 6px;
+  }
+
+  .layout .logo img {
+    width: 40px;
+  }
+
+  .layout .nav_menu a {
+    padding: 8px 6px;
+    border-radius: 6px;
+  }
+
+  .layout > .content,
+  .layout > .main-content,
+  .layout > .main--content,
+  .layout > main {
+    margin-left: 68px;
+    width: calc(100% - 68px);
+    padding: 10px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.25;
+  }
+
+  .top-bar h2,
+  .header--title h2 {
+    font-size: 1.1rem;
+  }
+
+  .card,
+  .payment--card,
+  .chart--card,
+  .profile--card,
+  .table-container {
+    padding: 12px;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .sell-form,
+  button {
+    min-height: 40px;
+    font-size: 0.9rem;
+  }
+
+  table {
+    font-size: 12px;
+    min-width: 560px;
+  }
+}

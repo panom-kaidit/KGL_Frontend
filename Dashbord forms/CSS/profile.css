@@ -1,0 +1,166 @@
+.profile--container {
+    display: flex;
+    justify-content: center;
+}
+
+.profile--card {
+    background: #fff;
+    max-width: 420px;
+    width: 100%;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.profile--avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.profile--avatar-wrapper img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.avatar--overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 0 0 55px 55px;
+    padding: 6px 0 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.profile--avatar-wrapper:hover .avatar--overlay {
+    opacity: 1;
+}
+
+.avatar--overlay i {
+    color: #fff;
+    font-size: 16px;
+}
+
+.profile--card h3 {
+    color: #1B5E20;
+}
+
+.role {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+.profile--info p {
+    font-size: 14px;
+    margin: 6px 0;
+}
+
+.profile--bio {
+    text-align: left;
+    margin-top: 1.5rem;
+}
+
+.profile--bio h4 {
+    color: #1B5E20;
+    margin-bottom: 6px;
+}
+
+.profile--bio p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.bio--edit-btn {
+    background: none;
+    border: none;
+    color: #1B5E20;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bio--edit-btn:hover {
+    text-decoration: underline;
+}
+
+.bio--textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 8px;
+    font-size: 13px;
+    border: 1px solid #c8e6c9;
+    border-radius: 6px;
+    resize: vertical;
+    font-family: inherit;
+    line-height: 1.6;
+    color: #333;
+    box-sizing: border-box;
+}
+
+.bio--textarea:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+
+.bio--save-btn {
+    margin-top: 8px;
+    background: #1B5E20;
+    color: #fff;
+    border: none;
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bio--save-btn:hover {
+    background: #145218;
+}
+
+.bio--cancel-btn {
+    margin-top: 8px;
+    margin-left: 6px;
+    background: none;
+    color: #777;
+    border: 1px solid #ccc;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.profile--save-msg {
+    font-size: 12px;
+    color: #1B5E20;
+    margin-top: 6px;
+}
+
+.profile-pic-input--hidden {
+    display: none;
+}
+
+.bio--edit-controls--hidden {
+    display: none;
+}
+
+
+/* ================= MOBILE RESPONSIVENESS ================= */
+
+
+/* Beginner Friendly: Resize profile card on mobile */
+
+
