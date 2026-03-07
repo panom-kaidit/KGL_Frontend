@@ -190,6 +190,18 @@ function syncCashSelection() {
   }
 }
 
+function preselectFromQuery() {
+  const params = new URLSearchParams(window.location.search);
+  const product = params.get("product");
+  if (!product) return;
+
+  const select = document.getElementById("produce-name-credit");
+  const match = catalog.find((p) => normalizeName(p.name) === normalizeName(product));
+  if (match) {
+    select.value = match.name;
+    syncCreditSelection();
+  }
+}
 function syncCreditSelection() {
   const name = document.getElementById("produce-name-credit").value;
   const qty = Number(document.getElementById("credit-tonnage").value || 0);
