@@ -108,13 +108,6 @@ function getSaleCategory(sale) {
 }
 
 /**
- * Get sale product name with fallback.
- */
-function getSaleProductName(sale) {
-  return String(sale.produceName || sale.produceType || "Unknown Product").trim() || "Unknown Product";
-}
-
-/**
  * Apply selected filters in frontend for consistency.
  */
 function applyClientFilters(sales, filters) {
@@ -132,28 +125,6 @@ function applyClientFilters(sales, filters) {
 }
 
 /**
- * Build category breakdown from filtered sales.
- */
-function buildCategoryBreakdown(sales) {
-  const map = {};
-
-  sales.forEach((sale) => {
-    const category = getSaleCategory(sale);
-    const productName = getSaleProductName(sale);
-    const key = `${category}__${productName}`;
-
-    if (!map[key]) {
-      map[key] = { category, productName, unitsSold: 0, totalRevenue: 0 };
-    }
-
-    map[key].unitsSold += toNumber(sale.tonnage);
-    map[key].totalRevenue += getSaleValue(sale);
-  });
-
-  return Object.values(map).sort((a, b) => b.totalRevenue - a.totalRevenue);
-}
-
-/**
  * Render loading state in cards and table.
  */
 function renderLoadingState() {
@@ -163,7 +134,7 @@ function renderLoadingState() {
 
   document.getElementById("categoryBreakdownBody").innerHTML = `
     <tr>
-      <td colspan="4" style="text-align:center;color:#999;">Loading sales data...</td>
+      <td colspan="5" style="text-align:center;color:#999;">Loading sales data...</td>
     </tr>
   `;
 }
@@ -178,7 +149,7 @@ function renderErrorState() {
 
   document.getElementById("categoryBreakdownBody").innerHTML = `
     <tr>
-      <td colspan="4" style="text-align:center;color:#c62828;">Failed to load sales data</td>
+      <td colspan="5" style="text-align:center;color:#c62828;">Failed to load sales data</td>
     </tr>
   `;
 }
@@ -195,7 +166,7 @@ function renderSummaryCards(totalSalesAmount, totalTransactions, averageSaleValu
 /**
  * Render category breakdown table rows.
  */
-function renderCategoryTable(categoryBreakdown, totalSalesAmount) {
+function renderCategoryTable(categoryBreakdown) {
   const tbody = document.getElementById("categoryBreakdownBody");
 
   if (!categoryBreakdown.length) {
@@ -209,14 +180,13 @@ function renderCategoryTable(categoryBreakdown, totalSalesAmount) {
 
   tbody.innerHTML = categoryBreakdown
     .map((row) => {
-        const pct = totalSalesAmount > 0 ? (row.totalRevenue / totalSalesAmount) * 100 : 0;
-        return `
+      return `
           <tr>
             <td>${escapeHtml(row.category)}</td>
             <td>${escapeHtml(row.productName)}</td>
             <td>${toNumber(row.unitsSold).toLocaleString("en-US")}</td>
-            <td>${formatUGX(Math.round(row.totalRevenue))}</td>
-            <td>${pct.toFixed(1)}%</td>
+            <td>${formatUGX(row.totalRevenue)}</td>
+            <td>${toNumber(row.percent).toFixed(1)}%</td>
         </tr>
       `;
     })
@@ -311,9 +281,10 @@ async function loadSalesSummary() {
     const suffix = query ? `?${query}` : "";
 
     // Send selected filters as query params to backend endpoints.
-    const [salesResult, creditsResult] = await Promise.allSettled([
+    const [salesResult, creditsResult, breakdownResult] = await Promise.allSettled([
       fetchJson(`/sales/branch${suffix}`),
-      fetchJson(`/credits/all${suffix}`)
+      fetchJson(`/credits/all${suffix}`),
+      fetchJson(`/sales/summary/breakdown${suffix}`)
     ]);
 
     const sales = salesResult.status === "fulfilled" && Array.isArray(salesResult.value?.data)
@@ -340,14 +311,17 @@ async function loadSalesSummary() {
     const totalSalesAmount = filteredSales.reduce((sum, sale) => sum + getSaleValue(sale), 0);
     const totalTransactions = filteredSales.length;
     const averageSaleValue = totalTransactions > 0 ? totalSalesAmount / totalTransactions : 0;
-    const categoryBreakdown = buildCategoryBreakdown(filteredSales);
+    const categoryBreakdown =
+      breakdownResult.status === "fulfilled" && Array.isArray(breakdownResult.value?.data)
+        ? breakdownResult.value.data
+        : [];
 
     renderSummaryCards(
       Math.round(totalSalesAmount),
       totalTransactions,
       Math.round(averageSaleValue)
     );
-    renderCategoryTable(categoryBreakdown, totalSalesAmount);
+    renderCategoryTable(categoryBreakdown);
   } catch (error) {
     console.error("Failed to load director sales summary:", error);
     renderErrorState();
