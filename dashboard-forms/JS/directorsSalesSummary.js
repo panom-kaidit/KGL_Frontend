@@ -1,4 +1,5 @@
 const API_BASE = window.API_URL || "https://kgl-project-3g6j.onrender.com";
+let optionSourceSales = [];
 
 /**
  * Read JWT token from localStorage.
@@ -246,6 +247,31 @@ function populateFilterOptions(allSales) {
   categorySelect.value = Array.from(categorySet).includes(currentCategory) ? currentCategory : "all";
 }
 
+async function loadOptionSourceSales() {
+  const [salesResult, creditsResult] = await Promise.allSettled([
+    fetchJson("/sales/branch"),
+    fetchJson("/credits/all")
+  ]);
+
+  const sales = salesResult.status === "fulfilled" && Array.isArray(salesResult.value?.data)
+    ? salesResult.value.data
+    : [];
+
+  const credits = creditsResult.status === "fulfilled" && Array.isArray(creditsResult.value?.data)
+    ? creditsResult.value.data
+    : [];
+
+  const mergedMap = new Map();
+  [...sales, ...credits].forEach((sale) => {
+    if (sale && sale._id) {
+      mergedMap.set(String(sale._id), sale);
+    }
+  });
+
+  optionSourceSales = Array.from(mergedMap.values());
+  populateFilterOptions(optionSourceSales);
+}
+
 /**
  * Read current filter values from inputs.
  */
@@ -264,6 +290,10 @@ function getCurrentFilters() {
 async function loadSalesSummary() {
   try {
     renderLoadingState();
+
+    if (!optionSourceSales.length) {
+      await loadOptionSourceSales();
+    }
 
     const filters = getCurrentFilters();
     const query = buildQueryString(filters);
@@ -290,10 +320,10 @@ async function loadSalesSummary() {
     });
     const allSales = Array.from(mergedMap.values());
 
-    // Update filter dropdown options based on live data.
-    populateFilterOptions(allSales);
+    // Keep dropdown options based on the full unfiltered director dataset.
+    populateFilterOptions(optionSourceSales);
 
-    // Apply filters in frontend to keep behavior reliable.
+    // Apply client filters to keep frontend and backend results aligned.
     const filteredSales = applyClientFilters(allSales, filters);
 
     const totalSalesAmount = filteredSales.reduce((sum, sale) => sum + getSaleValue(sale), 0);
