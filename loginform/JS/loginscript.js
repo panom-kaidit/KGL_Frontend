@@ -16,6 +16,35 @@ function clearMessage() {
     messageBox.className = "login-message";
 }
 
+async function readJsonSafely(response) {
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+        return null;
+    }
+
+    try {
+        return await response.json();
+    } catch {
+        return null;
+    }
+}
+
+function getLoginErrorMessage(response, body) {
+    if (body && typeof body.message === "string" && body.message.trim()) {
+        return body.message;
+    }
+
+    if (response.status === 403) {
+        return "Access denied.";
+    }
+
+    if (response.status >= 500) {
+        return "Server error. Please try again later.";
+    }
+
+    return "Invalid email or password";
+}
+
 // Function to decode JWT token
 function decodeToken(token) {
     try {
@@ -46,11 +75,16 @@ form.addEventListener("submit", async function (event) {
             })
         });
 
-        const data = await response.json();
+        const data = await readJsonSafely(response);
 
         // If login failed
         if (!response.ok) {
-            showMessage(data.message || "Invalid email or password", "error");
+            showMessage(getLoginErrorMessage(response, data), "error");
+            return;
+        }
+
+        if (!data || !data.token) {
+            showMessage("Server error. Please try again later.", "error");
             return;
         }
 
@@ -99,6 +133,6 @@ form.addEventListener("submit", async function (event) {
 
     } catch (error) {
         console.error("Error:", error);
-        showMessage("Something went wrong. Check server.", "error");
+        showMessage("Network error. Please try again.", "error");
     }
 });

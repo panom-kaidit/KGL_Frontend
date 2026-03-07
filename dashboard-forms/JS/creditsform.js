@@ -18,7 +18,7 @@ function getToken() {
 
 let currentSale = null;
 
-function showAlert(message, type = "error") {
+function showCreditMessage(message, type = "error") {
   const box = document.getElementById("alert-box");
   box.className = `alert alert-${type}`;
   box.textContent = message;
@@ -29,6 +29,35 @@ function clearAlert() {
   const box = document.getElementById("alert-box");
   box.className = "alert hidden";
   box.textContent = "";
+}
+
+async function readJsonSafely(response) {
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    return null;
+  }
+
+  try {
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
+function getResponseMessage(response, body, fallback) {
+  if (body && typeof body.message === "string" && body.message.trim()) {
+    return body.message;
+  }
+
+  if (response.status === 403) {
+    return "This credit belongs to another branch and cannot be updated.";
+  }
+
+  if (response.status >= 500) {
+    return "Server error. Please try again later.";
+  }
+
+  return fallback;
 }
 
 function show(id) {
@@ -168,13 +197,13 @@ async function searchCredit() {
 
   // Input validation for empty search.
   if (!searchTerm) {
-    showAlert("Please enter a name, NIN, phone, location, or product to search.", "error");
+    showCreditMessage("Please enter a name, NIN, phone, location, or product to search.", "error");
     return;
   }
 
   const token = getToken();
   if (!token) {
-    showAlert("Session expired. Please log in again.", "error");
+    showCreditMessage("Session expired. Please log in again.", "error");
     setTimeout(() => {
       window.location.href = "../../loginform/html/login.html";
     }, 1200);
@@ -190,14 +219,14 @@ async function searchCredit() {
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    const body = await res.json();
+    const body = await readJsonSafely(res);
 
     if (!res.ok) {
       currentSale = null;
       hide("details-card");
       hide("payment-card");
       hide("paid-card");
-      showAlert(body.message || "No credit records found.", "error");
+      showCreditMessage(getResponseMessage(res, body, "No credit records found."), "error");
       return;
     }
 
@@ -208,7 +237,7 @@ async function searchCredit() {
       hide("details-card");
       hide("payment-card");
       hide("paid-card");
-      showAlert("No credit records found for your search.", "error");
+      showCreditMessage("No credit records found for your search.", "error");
       return;
     }
 
@@ -220,12 +249,12 @@ async function searchCredit() {
     document.getElementById("payment-form").reset();
 
     if (records.length > 1) {
-      showAlert(`Found ${records.length} matching credit records. Showing the most recent one.`, "success");
+      showCreditMessage(`Found ${records.length} matching credit records. Showing the most recent one.`, "success");
     } else {
-      showAlert("Credit record found.", "success");
+      showCreditMessage("Credit record found.", "success");
     }
   } catch (error) {
-    showAlert("Network error. Please try again.", "error");
+    showCreditMessage("Network error. Please try again.", "error");
   } finally {
     btn.disabled = false;
     btn.textContent = "Search";
@@ -237,7 +266,7 @@ async function submitPayment(event) {
   clearAlert();
 
   if (!currentSale) {
-    showAlert("No credit record loaded. Please search first.", "error");
+    showCreditMessage("No credit record loaded. Please search first.", "error");
     return;
   }
 
@@ -245,18 +274,18 @@ async function submitPayment(event) {
   const amount = Number(rawAmount);
 
   if (!rawAmount || isNaN(amount) || amount <= 0) {
-    showAlert("Payment amount must be greater than 0.", "error");
+    showCreditMessage("Payment amount must be greater than 0.", "error");
     return;
   }
 
   if (amount > currentSale.amountDue) {
-    showAlert(`Overpayment not allowed. Maximum is UGX ${fmt(currentSale.amountDue)}.`, "error");
+    showCreditMessage(`Overpayment not allowed. Maximum is UGX ${fmt(currentSale.amountDue)}.`, "error");
     return;
   }
 
   const token = getToken();
   if (!token) {
-    showAlert("Session expired. Please log in again.", "error");
+    showCreditMessage("Session expired. Please log in again.", "error");
     setTimeout(() => {
       window.location.href = "../../loginform/html/login.html";
     }, 1200);
@@ -277,18 +306,18 @@ async function submitPayment(event) {
       body: JSON.stringify({ paymentAmount: amount })
     });
 
-    const body = await res.json();
+    const body = await readJsonSafely(res);
 
     if (!res.ok) {
-      showAlert(body.message || "Payment failed.", "error");
+      showCreditMessage(getResponseMessage(res, body, "Payment failed."), "error");
       return;
     }
 
-    showAlert(body.message || "Payment recorded.", "success");
+    showCreditMessage(getResponseMessage(res, body, "Payment recorded."), "success");
     updateBalanceUI(body.amountDue, body.status, amount);
     document.getElementById("payment-amount").value = "";
   } catch (error) {
-    showAlert("Network error. Please try again.", "error");
+    showCreditMessage("Network error. Please try again.", "error");
   } finally {
     btn.disabled = false;
     btn.textContent = "Confirm Payment";
