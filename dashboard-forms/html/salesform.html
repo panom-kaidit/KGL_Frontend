@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sales Form</title>
     <link rel="stylesheet" href="../CSS/salesform.css" />
+    <link rel="stylesheet" href="../CSS/tables.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -139,25 +140,27 @@
         </div>
 
         <div class="form-group" style="grid-column: span 2">
-          <table width="100%" border="1" cellpadding="8" cellspacing="0">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Category</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Total</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="product-list"></tbody>
-            <tfoot>
-              <tr>
-                <td colspan="4"><strong>Grand Total</strong></td>
-                <td colspan="2"><strong id="grand-total">0</strong></td>
-              </tr>
-            </tfoot>
-          </table>
+          <div class="table-container">
+            <table class="sales-table" width="100%" border="1" cellpadding="8" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="product-list"></tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4"><strong>Grand Total</strong></td>
+                  <td colspan="2"><strong id="grand-total">0</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
 
         <div class="submit-btn">
@@ -248,25 +251,27 @@
         </div>
 
         <div class="form-group" style="grid-column: span 2">
-          <table width="100%" border="1" cellpadding="8" cellspacing="0">
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Category</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Total</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="credit-product-list"></tbody>
-            <tfoot>
-              <tr>
-                <td colspan="4"><strong>Grand Total</strong></td>
-                <td colspan="2"><strong id="credit-grand-total">0</strong></td>
-              </tr>
-            </tfoot>
-          </table>
+          <div class="table-container">
+            <table class="sales-table" width="100%" border="1" cellpadding="8" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="credit-product-list"></tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4"><strong>Grand Total</strong></td>
+                  <td colspan="2"><strong id="credit-grand-total">0</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
 
         <div class="submit-btn">
