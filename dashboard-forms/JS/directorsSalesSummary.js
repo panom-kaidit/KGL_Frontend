@@ -108,6 +108,13 @@ function getSaleCategory(sale) {
 }
 
 /**
+ * Get sale product name with fallback.
+ */
+function getSaleProductName(sale) {
+  return String(sale.produceName || sale.produceType || "Unknown Product").trim() || "Unknown Product";
+}
+
+/**
  * Apply selected filters in frontend for consistency.
  */
 function applyClientFilters(sales, filters) {
@@ -132,12 +139,15 @@ function buildCategoryBreakdown(sales) {
 
   sales.forEach((sale) => {
     const category = getSaleCategory(sale);
-    if (!map[category]) {
-      map[category] = { category, unitsSold: 0, totalRevenue: 0 };
+    const productName = getSaleProductName(sale);
+    const key = `${category}__${productName}`;
+
+    if (!map[key]) {
+      map[key] = { category, productName, unitsSold: 0, totalRevenue: 0 };
     }
 
-    map[category].unitsSold += toNumber(sale.tonnage);
-    map[category].totalRevenue += getSaleValue(sale);
+    map[key].unitsSold += toNumber(sale.tonnage);
+    map[key].totalRevenue += getSaleValue(sale);
   });
 
   return Object.values(map).sort((a, b) => b.totalRevenue - a.totalRevenue);
@@ -191,7 +201,7 @@ function renderCategoryTable(categoryBreakdown, totalSalesAmount) {
   if (!categoryBreakdown.length) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="4" style="text-align:center;color:#999;">No sales data available</td>
+        <td colspan="5" style="text-align:center;color:#999;">No sales data available</td>
       </tr>
     `;
     return;
@@ -199,13 +209,14 @@ function renderCategoryTable(categoryBreakdown, totalSalesAmount) {
 
   tbody.innerHTML = categoryBreakdown
     .map((row) => {
-      const pct = totalSalesAmount > 0 ? (row.totalRevenue / totalSalesAmount) * 100 : 0;
-      return `
-        <tr>
-          <td>${escapeHtml(row.category)}</td>
-          <td>${toNumber(row.unitsSold).toLocaleString("en-US")}</td>
-          <td>${formatUGX(Math.round(row.totalRevenue))}</td>
-          <td>${pct.toFixed(1)}%</td>
+        const pct = totalSalesAmount > 0 ? (row.totalRevenue / totalSalesAmount) * 100 : 0;
+        return `
+          <tr>
+            <td>${escapeHtml(row.category)}</td>
+            <td>${escapeHtml(row.productName)}</td>
+            <td>${toNumber(row.unitsSold).toLocaleString("en-US")}</td>
+            <td>${formatUGX(Math.round(row.totalRevenue))}</td>
+            <td>${pct.toFixed(1)}%</td>
         </tr>
       `;
     })
