@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('userRole');
       localStorage.removeItem('userName');
       localStorage.removeItem('userBranch');
-      window.location.href = '/KGL_Frontend/index.html';
+      window.location.href = "../index.html";
     });
   }
 });
