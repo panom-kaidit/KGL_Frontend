@@ -57,6 +57,27 @@ body {
     gap: 15px;
 }
 
+.login-message {
+    display: none;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.login-message.success {
+    display: block;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.login-message.error {
+    display: block;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 .form-group label {
     font-size: 14px;
     margin-bottom: 5px;

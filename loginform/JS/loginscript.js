@@ -3,8 +3,18 @@
 const form = document.getElementById("form-box");
 const userMail = document.getElementById("email");
 const passCode = document.getElementById("passcode");
+const messageBox = document.getElementById("login-message");
 const API_URL = window.API_URL || "https://kgl-project-3g6j.onrender.com";
 
+function showMessage(text, type) {
+    messageBox.innerText = text;
+    messageBox.className = `login-message ${type}`;
+}
+
+function clearMessage() {
+    messageBox.innerText = "";
+    messageBox.className = "login-message";
+}
 
 // Function to decode JWT token
 function decodeToken(token) {
@@ -19,6 +29,7 @@ function decodeToken(token) {
 }
 form.addEventListener("submit", async function (event) {
     event.preventDefault();
+    clearMessage();
 
     const email = userMail.value.trim();
     const password = passCode.value.trim();
@@ -39,7 +50,7 @@ form.addEventListener("submit", async function (event) {
 
         // If login failed
         if (!response.ok) {
-            alert(data.message || "Login failed");
+            showMessage(data.message || "Invalid email or password", "error");
             return;
         }
 
@@ -61,19 +72,25 @@ form.addEventListener("submit", async function (event) {
           localStorage.setItem("userBranch", decodedToken.branch);
         }
 
-        alert("Login successful!");
-
         // Redirect based on user role
+        let dashboardUrl = null;
+
         if (userRole === "Sales-agent") {
-            window.location.href = "../../dashboard-forms/html/sellersDashboard.html";
+            dashboardUrl = "../../dashboard-forms/html/sellersDashboard.html";
         } else if (userRole === "Manager") {
-            window.location.href = "../../dashboard-forms/html/managersDashboard.html";
+            dashboardUrl = "../../dashboard-forms/html/managersDashboard.html";
         } else if (userRole === "Director") {
-            window.location.href = "../../dashboard-forms/DirectorsDashboard/directorsDashboard.html";
+            dashboardUrl = "../../dashboard-forms/DirectorsDashboard/directorsDashboard.html";
         } else {
-            alert("Unknown user role: " + userRole + ". Please contact support.");
+            showMessage("Unknown user role: " + userRole + ". Please contact support.", "error");
             console.error("Unknown role:", userRole);
+            return;
         }
+
+        showMessage("Login successful. Redirecting...", "success");
+        setTimeout(() => {
+            window.location.href = dashboardUrl;
+        }, 1500);
     
 
         // If backend returns ONLY token:
@@ -82,6 +99,6 @@ form.addEventListener("submit", async function (event) {
 
     } catch (error) {
         console.error("Error:", error);
-        alert("Something went wrong. Check server.");
+        showMessage("Something went wrong. Check server.", "error");
     }
 });
