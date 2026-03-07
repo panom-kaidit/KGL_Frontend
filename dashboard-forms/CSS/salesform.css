@@ -64,6 +64,27 @@ body {
     gap: 15px;
 }
 
+.sales-message {
+    display: none;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.sales-message.success {
+    display: block;
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.sales-message.error {
+    display: block;
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 /* =========================
    FORM GROUPS
 ========================= */

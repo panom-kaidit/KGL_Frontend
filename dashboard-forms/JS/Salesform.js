@@ -5,6 +5,22 @@ let creditProducts = [];
 let catalog = [];
 let catalogByName = {};
 
+function showSalesMessage(text, type) {
+  const box = document.getElementById("sales-message");
+  if (!box) return;
+
+  box.innerText = text;
+  box.className = `sales-message ${type}`;
+}
+
+function clearSalesMessage() {
+  const box = document.getElementById("sales-message");
+  if (!box) return;
+
+  box.innerText = "";
+  box.className = "sales-message";
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const token = getToken();
   const decodedToken = token ? decodeToken(token) : null;
@@ -16,8 +32,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("[NAV DEBUG] currentUser.role:", currentUser ? currentUser.role : null);
 
   if (!token || !userName) {
-    alert("Session expired. Please log in again.");
-    window.location.href = "../../loginform/html/login.html";
+    showSalesMessage("Session expired. Please log in again.", "error");
+    setTimeout(() => {
+      window.location.href = "../../loginform/html/login.html";
+    }, 1500);
     return;
   }
 
@@ -33,7 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadLiveCatalog();
     preselectFromQuery();
   } catch (err) {
-    alert("Failed to load branch products. Please refresh.");
+    showSalesMessage("Failed to load branch products. Please refresh.", "error");
   }
 });
 
@@ -46,9 +64,11 @@ function wireFormEvents() {
 
   document.getElementById("product-name").addEventListener("change", syncCashSelection);
   document.getElementById("quantity").addEventListener("input", syncCashSelection);
-  document.getElementById("produce-name-credit").addEventListener("blur", syncCreditSelection);
+  document.getElementById("produce-name-credit").addEventListener("change", syncCreditSelection);
   document.getElementById("credit-tonnage").addEventListener("input", syncCreditSelection);
 
+  document.getElementById("product-category").readOnly = true;
+  document.getElementById("produce-type-credit").readOnly = true;
   document.getElementById("unit-price").readOnly = true;
   document.getElementById("credit-unit-price").readOnly = true;
   document.getElementById("amount-due").readOnly = true;
@@ -105,10 +125,24 @@ async function loadLiveCatalog() {
   }, {});
 
   populateCashProductSelect();
+  populateCreditProductSelect();
 }
 
 function populateCashProductSelect() {
   const select = document.getElementById("product-name");
+  select.innerHTML = '<option value="">-- Select Product --</option>';
+
+  catalog.forEach((item) => {
+    const disabled = item.stockKg <= 0 ? "disabled" : "";
+    select.insertAdjacentHTML(
+      "beforeend",
+      `<option value="${escapeAttr(item.name)}" ${disabled}>${escapeHtml(item.name)} (${item.stockKg}kg)</option>`
+    );
+  });
+}
+
+function populateCreditProductSelect() {
+  const select = document.getElementById("produce-name-credit");
   select.innerHTML = '<option value="">-- Select Product --</option>';
 
   catalog.forEach((item) => {
@@ -141,6 +175,7 @@ function syncCashSelection() {
   if (!item) {
     document.getElementById("product-category").value = "";
     document.getElementById("unit-price").value = "";
+    clearSalesMessage();
     return;
   }
 
@@ -148,29 +183,33 @@ function syncCashSelection() {
   document.getElementById("unit-price").value = item.price;
 
   if (qty > item.stockKg) {
-    alert(`Only ${item.stockKg} kg available for ${item.name}.`);
+    showSalesMessage(`Only ${item.stockKg} kg available for ${item.name}.`, "error");
     document.getElementById("quantity").value = item.stockKg > 0 ? item.stockKg : "";
+  } else {
+    clearSalesMessage();
   }
 }
 
 function syncCreditSelection() {
-  const name = document.getElementById("produce-name-credit").value.trim();
+  const name = document.getElementById("produce-name-credit").value;
   const qty = Number(document.getElementById("credit-tonnage").value || 0);
   const item = catalogByName[normalizeName(name)];
 
   if (!item) {
     document.getElementById("produce-type-credit").value = "";
     document.getElementById("credit-unit-price").value = "";
+    clearSalesMessage();
     return;
   }
 
-  document.getElementById("produce-name-credit").value = item.name;
   document.getElementById("produce-type-credit").value = item.category;
   document.getElementById("credit-unit-price").value = item.price;
 
   if (qty > item.stockKg) {
-    alert(`Only ${item.stockKg} kg available for ${item.name}.`);
+    showSalesMessage(`Only ${item.stockKg} kg available for ${item.name}.`, "error");
     document.getElementById("credit-tonnage").value = item.stockKg > 0 ? item.stockKg : "";
+  } else {
+    clearSalesMessage();
   }
 }
 
@@ -180,20 +219,21 @@ function showForm(type) {
 }
 
 function addProduct() {
+  clearSalesMessage();
   const name = document.getElementById("product-name").value;
   const item = catalogByName[normalizeName(name)];
   const qty = Number(document.getElementById("quantity").value);
 
   if (!item) {
-    alert("Please select a valid product from branch catalog.");
+    showSalesMessage("Please select a valid product from branch catalog.", "error");
     return;
   }
   if (!qty || qty <= 0) {
-    alert("Please enter a valid quantity.");
+    showSalesMessage("Please enter a valid quantity.", "error");
     return;
   }
   if (qty > item.stockKg) {
-    alert(`Insufficient stock. Available: ${item.stockKg} kg.`);
+    showSalesMessage(`Insufficient stock. Available: ${item.stockKg} kg.`, "error");
     return;
   }
 
@@ -205,6 +245,7 @@ function addProduct() {
   document.getElementById("product-category").value = "";
   document.getElementById("quantity").value = "";
   document.getElementById("unit-price").value = "";
+  showSalesMessage(`${item.name} added to the cash sale list.`, "success");
 }
 
 function renderProducts() {
@@ -236,20 +277,21 @@ function removeProduct(index) {
 }
 
 function addProductCredit() {
-  const name = document.getElementById("produce-name-credit").value.trim();
+  clearSalesMessage();
+  const name = document.getElementById("produce-name-credit").value;
   const item = catalogByName[normalizeName(name)];
   const qty = Number(document.getElementById("credit-tonnage").value);
 
   if (!item) {
-    alert("Product not found in this branch catalog.");
+    showSalesMessage("Please select a valid product from branch catalog.", "error");
     return;
   }
   if (!qty || qty <= 0) {
-    alert("Please enter a valid tonnage.");
+    showSalesMessage("Please enter a valid quantity.", "error");
     return;
   }
   if (qty > item.stockKg) {
-    alert(`Insufficient stock. Available: ${item.stockKg} kg.`);
+    showSalesMessage(`Insufficient stock. Available: ${item.stockKg} kg.`, "error");
     return;
   }
 
@@ -261,6 +303,7 @@ function addProductCredit() {
   document.getElementById("produce-type-credit").value = "";
   document.getElementById("credit-tonnage").value = "";
   document.getElementById("credit-unit-price").value = "";
+  showSalesMessage(`${item.name} added to the credit sale list.`, "success");
 }
 
 function renderCreditProducts() {
@@ -369,8 +412,9 @@ function navigateToRoleGoSell(currentUser) {
 
 async function handleCashSubmit(e) {
   e.preventDefault();
+  clearSalesMessage();
   if (products.length === 0) {
-    alert("Add at least one product");
+    showSalesMessage("Add at least one product", "error");
     return;
   }
 
@@ -407,16 +451,19 @@ async function handleCashSubmit(e) {
   }
 
   if (failCount === 0) {
-    alert(`All ${successCount} products recorded successfully`);
+    showSalesMessage(`All ${successCount} products recorded successfully`, "success");
     const currentUser = getCurrentUser();
-    navigateToRoleGoSell(currentUser);
+    setTimeout(() => {
+      navigateToRoleGoSell(currentUser);
+    }, 1500);
   } else {
-    alert(`Recorded ${successCount} products, ${failCount} failed`);
+    showSalesMessage(`Recorded ${successCount} products, ${failCount} failed`, "error");
   }
 }
 
 async function handleCreditSubmit(e) {
   e.preventDefault();
+  clearSalesMessage();
 
   const buyer = document.getElementById("buyer-name").value;
   const nationalId = document.getElementById("national-id").value;
@@ -426,11 +473,11 @@ async function handleCreditSubmit(e) {
   const dispatchDate = document.getElementById("dispatch-date").value;
 
   if (!buyer || !nationalId) {
-    alert("Buyer name and NIN required");
+    showSalesMessage("Buyer name and NIN required", "error");
     return;
   }
   if (creditProducts.length === 0) {
-    alert("Add at least one product");
+    showSalesMessage("Add at least one product", "error");
     return;
   }
 
@@ -463,11 +510,13 @@ async function handleCreditSubmit(e) {
   }
 
   if (failCount === 0) {
-    alert(`All ${successCount} products recorded successfully`);
+    showSalesMessage(`All ${successCount} products recorded successfully`, "success");
     const currentUser = getCurrentUser();
-    navigateToRoleGoSell(currentUser);
+    setTimeout(() => {
+      navigateToRoleGoSell(currentUser);
+    }, 1500);
   } else {
-    alert(`Recorded ${successCount} products, ${failCount} failed`);
+    showSalesMessage(`Recorded ${successCount} products, ${failCount} failed`, "error");
   }
 }
 
