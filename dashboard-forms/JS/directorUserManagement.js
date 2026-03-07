@@ -1,10 +1,3 @@
-/**
- * directorUserManagement.js
- *
- * Same UI logic pattern as manager usermanagement.js,
- * but for Director view.
- */
-
 "use strict";
 
 const API_BASE = window.API_URL || "https://kgl-project-3g6j.onrender.com";
@@ -28,6 +21,14 @@ function showAlert(message, type) {
   const box = document.getElementById("alert-box");
   box.className = "um-alert " + (type || "error");
   box.textContent = message;
+}
+
+async function readJsonSafely(res) {
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
 }
 
 function avatarLetter(name) {
@@ -71,35 +72,25 @@ function renderTable(users) {
     .map(function (u, i) {
       return (
         "<tr>" +
-        '<td class="row-num">' +
-        (i + 1) +
-        "</td>" +
+        '<td class="row-num">' + (i + 1) + "</td>" +
         "<td>" +
         '<div class="user-name-cell">' +
-        '<div class="avatar">' +
-        avatarLetter(u.name) +
-        "</div>" +
-        "<span>" +
-        escHtml(u.name || "-") +
-        "</span>" +
+        '<div class="avatar">' + avatarLetter(u.name) + "</div>" +
+        "<span>" + escHtml(u.name || "-") + "</span>" +
         "</div>" +
         "</td>" +
+        "<td>" + escHtml(u.email || "-") + "</td>" +
         "<td>" +
-        escHtml(u.email || "-") +
-        "</td>" +
-        "<td>" +
-        '<span class="role-badge ' +
-        roleBadgeClass(u.role) +
-        '">' +
+        '<span class="role-badge ' + roleBadgeClass(u.role) + '">' +
         escHtml(u.role || "-") +
         "</span>" +
         "</td>" +
-        '<td><span class="branch-badge">' +
-        escHtml(u.branch || "-") +
-        "</span></td>" +
-        "<td>" +
-        escHtml(u.phone || "-") +
-        "</td>" +
+        '<td><span class="branch-badge">' + escHtml(u.branch || "-") + "</span></td>" +
+        "<td>" + escHtml(u.phone || "-") + "</td>" +
+        '<td><div class="action-buttons">' +
+        '<button class="edit-user" data-user-id="' + escHtml(u._id || "") + '">Edit</button>' +
+        '<button class="delete-user" data-user-id="' + escHtml(u._id || "") + '">Delete</button>' +
+        "</div></td>" +
         "</tr>"
       );
     })
@@ -107,10 +98,7 @@ function renderTable(users) {
 }
 
 function applyFilters() {
-  const query = document
-    .getElementById("searchInput")
-    .value.trim()
-    .toLowerCase();
+  const query = document.getElementById("searchInput").value.trim().toLowerCase();
 
   const filtered = allUsers.filter(function (u) {
     const haystack = (
@@ -124,6 +112,7 @@ function applyFilters() {
       " " +
       (u.phone || "")
     ).toLowerCase();
+
     return haystack.indexOf(query) !== -1;
   });
 
@@ -151,52 +140,110 @@ async function loadDirectorUsers() {
     return;
   }
 
-  // Try common list endpoints in order, so frontend works with existing backend shape.
-  const endpoints = ["/users/all", "/users", "/users/branch"];
-  let loaded = false;
+  try {
+    const res = await fetch(API_BASE + "/users", {
+      headers: { Authorization: "Bearer " + token }
+    });
 
-  for (let i = 0; i < endpoints.length; i++) {
-    try {
-      const res = await fetch(API_BASE + endpoints[i], {
-        headers: { Authorization: "Bearer " + token }
-      });
-
-      const body = await res.json();
-      // Temporary debug logs for response troubleshooting.
-      console.log("Director user fetch:", endpoints[i], res.status, body);
-
-      if (!res.ok) {
-        continue;
-      }
-
-      allUsers = body.data || [];
-
-      // Keep header text simple and helpful.
-      if (body.branch) {
-        document.getElementById("branch-label").textContent =
-          "Branch: " + body.branch + " - " + allUsers.length + " users";
-      } else {
-        document.getElementById("branch-label").textContent =
-          "All Branches - " + allUsers.length + " users";
-      }
-
-      applyFilters();
-      loaded = true;
-      break;
-    } catch {
-      // Try next endpoint.
+    const body = await readJsonSafely(res);
+    if (!res.ok) {
+      showAlert((body && body.message) || "Failed to load users for Director view.", "error");
+      document.getElementById("usersTableBody").innerHTML =
+        '<tr><td colspan="7" class="text-center">Could not load users.</td></tr>';
+      document.getElementById("branch-label").textContent = "Could not load users.";
+      return;
     }
-  }
 
-  if (!loaded) {
+    allUsers = body.data || [];
+    document.getElementById("branch-label").textContent =
+      "All Branches - " + allUsers.length + " users";
+    applyFilters();
+  } catch {
     showAlert("Failed to load users for Director view.", "error");
     document.getElementById("usersTableBody").innerHTML =
-      '<tr><td colspan="6" class="text-center">Could not load users.</td></tr>';
+      '<tr><td colspan="7" class="text-center">Could not load users.</td></tr>';
     document.getElementById("branch-label").textContent = "Could not load users.";
   }
 }
 
-// Same interaction pattern as manager page.
+async function editUser(userId) {
+  const user = allUsers.find(function (item) {
+    return item._id === userId;
+  });
+
+  if (!user) {
+    showAlert("User not found.", "error");
+    return;
+  }
+
+  const name = window.prompt("Edit name:", user.name || "");
+  if (name === null) return;
+
+  const email = window.prompt("Edit email:", user.email || "");
+  if (email === null) return;
+
+  const phone = window.prompt("Edit phone:", user.phone || "");
+  if (phone === null) return;
+
+  const role = window.prompt("Edit role (Director, Manager, Sales-agent):", user.role || "");
+  if (role === null) return;
+
+  const branch = window.prompt("Edit branch:", user.branch || "");
+  if (branch === null) return;
+
+  try {
+    const res = await fetch(API_BASE + "/users/" + encodeURIComponent(userId), {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getToken()
+      },
+      body: JSON.stringify({
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        role: role.trim(),
+        branch: branch.trim()
+      })
+    });
+
+    const body = await readJsonSafely(res);
+    if (!res.ok) {
+      showAlert((body && body.message) || "Failed to update user.", "error");
+      return;
+    }
+
+    showAlert("User updated successfully.", "success");
+    loadDirectorUsers();
+  } catch {
+    showAlert("Network error. Please try again.", "error");
+  }
+}
+
+async function deleteUser(userId) {
+  if (!window.confirm("Are you sure you want to delete this user?")) {
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE + "/users/" + encodeURIComponent(userId), {
+      method: "DELETE",
+      headers: { Authorization: "Bearer " + getToken() }
+    });
+
+    const body = await readJsonSafely(res);
+    if (!res.ok) {
+      showAlert((body && body.message) || "Failed to delete user.", "error");
+      return;
+    }
+
+    showAlert("User deleted successfully.", "success");
+    loadDirectorUsers();
+  } catch {
+    showAlert("Network error. Please try again.", "error");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   loadDirectorUsers();
 
@@ -228,5 +275,18 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("sortAZ").classList.remove("active");
     applyFilters();
   });
-});
 
+  document.getElementById("usersTableBody").addEventListener("click", function (event) {
+    const editBtn = event.target.closest(".edit-user");
+    const deleteBtn = event.target.closest(".delete-user");
+
+    if (editBtn) {
+      editUser(editBtn.getAttribute("data-user-id"));
+      return;
+    }
+
+    if (deleteBtn) {
+      deleteUser(deleteBtn.getAttribute("data-user-id"));
+    }
+  });
+});

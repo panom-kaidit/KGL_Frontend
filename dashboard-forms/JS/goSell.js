@@ -291,13 +291,14 @@ function displaySales(sales) {
   tableBody.innerHTML = sales
     .map(function (sale) {
       const isCash = sale.saleType === "cash";
+      const creditStatus = getCreditStatus(sale);
       const amount = isCash ? formatCurrency(sale.amountPaid || 0) : formatCurrency(sale.amountDue || 0);
       const typeBadge = isCash
         ? '<span class="badge cash">Cash</span>'
         : '<span class="badge credit">Credit</span>';
       const statusBadge = isCash
         ? '<span class="badge cash">Paid</span>'
-        : '<span class="badge credit">Due</span>';
+        : '<span class="badge ' + creditStatus.className + '">' + creditStatus.label + "</span>";
       const agentName = escHtml(
         sale.recordedBy && sale.recordedBy.name ? sale.recordedBy.name : sale.salesAgent || "-"
       );
@@ -358,5 +359,19 @@ function formatCurrency(num) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   });
+}
+
+function getCreditStatus(sale) {
+  const rawStatus = String(sale.status || "").toLowerCase();
+
+  if (rawStatus === "paid" || Number(sale.amountDue || 0) <= 0) {
+    return { label: "Paid", className: "cash" };
+  }
+
+  if (rawStatus === "partial") {
+    return { label: "Partial", className: "credit" };
+  }
+
+  return { label: "Pending", className: "credit" };
 }
 

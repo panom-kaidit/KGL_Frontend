@@ -302,6 +302,32 @@
   white-space: nowrap;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.edit-user,
+.delete-user {
+  border: none;
+  border-radius: 6px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.edit-user {
+  background: #e8f5e9;
+  color: #1B5E20;
+}
+
+.delete-user {
+  background: #fdecea;
+  color: #b71c1c;
+}
+
 /* ── Empty / no-results state ───────────────────────────────── */
 .no-results {
   display: flex;
