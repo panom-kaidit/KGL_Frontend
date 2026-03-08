@@ -190,12 +190,26 @@ function updateTopCards(allSales, creditSales) {
   setText("totalCreditSales", formatCount(creditSales.length));
 }
 
+async function loadTotalCreditRevenue() {
+  try {
+    const result = await fetchJson("/sales/summary/credit-revenue");
+    if (!result || typeof result.totalCreditRevenue !== "number") {
+      throw new Error("Invalid credit revenue response");
+    }
+    setText("totalCreditRevenue", formatUGX(Math.round(result?.totalCreditRevenue || 0)));
+  } catch (error) {
+    console.error("Failed to load total credit revenue:", error);
+    setText("totalCreditRevenue", "Error");
+  }
+}
+
 function showDashboardLoadError(message) {
   setText("totalRevenue", "--");
   setText("totalSales", "--");
   setText("totalUnitsSold", "--");
   setText("activeBranches", "--");
   setText("totalCreditSales", "--");
+  setText("totalCreditRevenue", "Error");
 
   const tableContainerTitle = document.querySelector(".table-container h3");
   if (tableContainerTitle) {
@@ -347,6 +361,8 @@ async function loadBranchPerformanceOverview() {
 
 async function loadDirectorDashboard() {
   try {
+    await loadTotalCreditRevenue();
+
     // Try both existing endpoints. Each may return data depending on role/branch setup.
     let salesData = [];
     let creditsData = [];
