@@ -162,19 +162,20 @@ body {
     border-radius: 10px;
 }
 
-table {
+table:not(.sales-table) {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
 }
 
-th, td {
+table:not(.sales-table) th,
+table:not(.sales-table) td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-th {
+table:not(.sales-table) th {
     background: #f1f1f1;
 }
 

@@ -6,13 +6,13 @@
   margin-bottom: 20px;
 }
 
-.sales-table {
+.table-container .sales-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.sales-table thead {
+.table-container .sales-table thead {
   background: #1B5E20;
   color: white;
   position: sticky;
@@ -20,29 +20,29 @@
   z-index: 10;
 }
 
-.sales-table thead th {
+.table-container .sales-table thead th {
   padding: 14px 12px;
   text-align: left;
   font-weight: 600;
   white-space: nowrap;
 }
 
-.sales-table tbody tr {
+.table-container .sales-table tbody tr {
   border-bottom: 1px solid #eee;
   transition: background-color 0.2s ease;
 }
 
-.sales-table tbody tr:hover {
+.table-container .sales-table tbody tr:hover {
   background-color: #f9f9f9;
 }
 
-.sales-table tbody td {
+.table-container .sales-table tbody td {
   padding: 11px 12px;
   color: #333;
 }
 
-.sales-table tbody tr.loading-row td,
-.sales-table tbody tr.error-row td {
+.table-container .sales-table tbody tr.loading-row td,
+.table-container .sales-table tbody tr.error-row td {
   text-align: center;
   color: #999;
   padding: 30px 12px;

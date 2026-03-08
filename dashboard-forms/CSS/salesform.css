@@ -189,14 +189,14 @@ body {
 /* =========================
    PRODUCT TABLE STYLING
 ========================= */
-table {
+table:not(.sales-table) {
     border-collapse: collapse;
     border: 1px solid #1B5E20;
     font-size: 13px;
 }
 
 /* Table Header */
-thead th {
+table:not(.sales-table) thead th {
     background: #1B5E20;
     color: #ffffff;
     border: 1px solid #1B5E20;
@@ -204,18 +204,18 @@ thead th {
 }
 
 /* Table Body */
-tbody td {
+table:not(.sales-table) tbody td {
     border: 1px solid #c8e6c9;
 }
 
 /* Table Footer */
-tfoot td {
+table:not(.sales-table) tfoot td {
     background: #e8f5e9;
     border: 1px solid #1B5E20;
 }
 
 /* Row hover effect (optional but nice) */
-tbody tr:hover {
+table:not(.sales-table) tbody tr:hover {
     background: #f1f8f4;
 }
 

@@ -162,18 +162,19 @@ body {
     margin-bottom: 15px;
 }
 
-table {
+table:not(.sales-table) {
     width: 100%;
     border-collapse: collapse;
 }
 
-th, td {
+table:not(.sales-table) th,
+table:not(.sales-table) td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #eee;
 }
 
-th {
+table:not(.sales-table) th {
     background: #f9f9f9;
     color: #555;
     font-weight: 600;

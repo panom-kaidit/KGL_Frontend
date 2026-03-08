@@ -47,7 +47,9 @@ svg {
   -webkit-overflow-scrolling: touch;
 }
 
-table {
+.table-container table,
+.table-responsive table,
+.stats-table-wrapper table {
   min-width: 640px;
 }
 
@@ -182,7 +184,9 @@ button,
     width: 100%;
   }
 
-  table {
+  .table-container table,
+  .table-responsive table,
+  .stats-table-wrapper table {
     font-size: 13px;
   }
 }
@@ -243,7 +247,9 @@ button,
     font-size: 0.9rem;
   }
 
-  table {
+  .table-container table,
+  .table-responsive table,
+  .stats-table-wrapper table {
     font-size: 12px;
     min-width: 560px;
   }
