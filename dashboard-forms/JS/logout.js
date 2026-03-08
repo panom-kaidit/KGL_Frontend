@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('userRole');
       localStorage.removeItem('userName');
       localStorage.removeItem('userBranch');
-      window.location.href = "../index.html";
+      localStorage.removeItem('user');
+      window.location.href = window.location.origin + '/';
     });
   }
 });
