@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.removeItem('userName');
       localStorage.removeItem('userBranch');
       localStorage.removeItem('user');
-      window.location.href = window.location.origin + '/';
+      const isGithubPages = window.location.hostname.includes('github.io');
+      window.location.href = isGithubPages ? '/KGL_Frontend/' : '/';
     });
   }
 });
