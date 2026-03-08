@@ -292,7 +292,9 @@ function displaySales(sales) {
     .map(function (sale) {
       const isCash = sale.saleType === "cash";
       const creditStatus = getCreditStatus(sale);
-      const amount = isCash ? formatCurrency(sale.amountPaid || 0) : formatCurrency(sale.amountDue || 0);
+      const amount = isCash
+        ? formatCurrency(sale.amountPaid || 0)
+        : formatCreditDisplayAmount(sale);
       const typeBadge = isCash
         ? '<span class="badge cash">Cash</span>'
         : '<span class="badge credit">Credit</span>';
@@ -359,6 +361,44 @@ function formatCurrency(num) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   });
+}
+
+function toAmount(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : 0;
+}
+
+function getCreditPaidAmount(sale) {
+  if (!Array.isArray(sale.paymentHistory)) return 0;
+
+  return sale.paymentHistory.reduce(function (sum, payment) {
+    return sum + toAmount(payment && payment.amount);
+  }, 0);
+}
+
+function getCreditTotalAmount(sale) {
+  const balance = Math.max(0, toAmount(sale.amountDue));
+  const amountPaid = getCreditPaidAmount(sale);
+  const derivedTotal = balance + amountPaid;
+
+  if (derivedTotal > 0) {
+    return Math.round(derivedTotal);
+  }
+
+  return Math.round(
+    toAmount(sale.totalAmount) || toAmount(sale.tonnage) * toAmount(sale.pricePerKg)
+  );
+}
+
+function formatCreditDisplayAmount(sale) {
+  const totalAmount = getCreditTotalAmount(sale);
+  const balance = Math.max(0, Math.round(toAmount(sale.amountDue)));
+
+  if (balance > 0) {
+    return "-" + formatCurrency(balance);
+  }
+
+  return formatCurrency(Math.round(totalAmount));
 }
 
 function getCreditStatus(sale) {
