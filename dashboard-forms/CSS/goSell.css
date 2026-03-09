@@ -36,7 +36,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgb(255, 255, 255);
     border-radius: 10px;
 }
 
@@ -382,10 +382,4 @@
 .no-results--hidden {
     display: none;
 }
-
-/* ================= MOBILE RESPONSIVENESS ================= */
-
-
-/* Beginner Friendly: Reduce padding on mobile */
-
 
