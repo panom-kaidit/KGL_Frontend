@@ -8,6 +8,9 @@
 "use strict";
 
 const API_BASE = window.API_URL || "https://kgl-project-3g6j.onrender.com";
+const params = new URLSearchParams(window.location.search);
+const editUserId = params.get("userId");
+const isEditMode = !!editUserId;
 
 function getToken() {
   return localStorage.getItem("token");
@@ -42,6 +45,98 @@ function clearAlert() {
   box.textContent = "";
 }
 
+function getFormTitle() {
+  return document.querySelector(".form-header h2");
+}
+
+function getFormSubtitle() {
+  return document.querySelector(".form-header p");
+}
+
+function setFormMode() {
+  var title = getFormTitle();
+  var subtitle = getFormSubtitle();
+  var submitBtn = document.getElementById("submit-btn");
+  var passwordInput = document.getElementById("password");
+
+  if (!isEditMode) {
+    return;
+  }
+
+  if (title) {
+    title.textContent = "Update User";
+  }
+
+  if (subtitle) {
+    subtitle.textContent = "Update staff member details";
+  }
+
+  if (submitBtn) {
+    submitBtn.textContent = "Update User";
+  }
+
+  if (passwordInput) {
+    passwordInput.required = false;
+    passwordInput.placeholder = "Leave blank to keep current password";
+  }
+}
+
+function normalizeUserPayload(data) {
+  if (data && data.data) {
+    return data.data;
+  }
+
+  if (data && data.user) {
+    return data.user;
+  }
+
+  return data;
+}
+
+function fillForm(user, callerRole, callerBranch) {
+  document.getElementById("name").value = user.name || "";
+  document.getElementById("email").value = user.email || "";
+  document.getElementById("phone").value = user.phone || "";
+  document.getElementById("password").value = "";
+
+  var roleSelect = document.getElementById("role");
+  var branchSelect = document.getElementById("branch");
+
+  if (user.role) {
+    roleSelect.value = user.role;
+  }
+
+  if (callerRole === "Manager") {
+    branchSelect.value = callerBranch || user.branch || "";
+  } else if (user.branch) {
+    branchSelect.value = user.branch;
+  }
+}
+
+async function loadUserForEdit(token, callerRole, callerBranch) {
+  clearAlert();
+
+  try {
+    var response = await fetch(API_BASE + "/users/" + encodeURIComponent(editUserId), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      }
+    });
+
+    var data = await response.json();
+    if (!response.ok) {
+      showAlert(data.message || "Failed to load user details.", "error");
+      return;
+    }
+
+    fillForm(normalizeUserPayload(data), callerRole, callerBranch);
+  } catch {
+    showAlert("Network error. Please check your connection.", "error");
+  }
+}
+
 async function handleSubmit(e) {
   e.preventDefault();
   clearAlert();
@@ -62,12 +157,17 @@ async function handleSubmit(e) {
   var callerRole = decoded ? decoded.role : "";
   var callerBranch = decoded ? decoded.branch : "";
 
-  if (!name || !email || !password || !role) {
-    showAlert("Name, email, password and role are required.", "error");
+  if (!name || !email || !role) {
+    showAlert("Name, email and role are required.", "error");
     return;
   }
 
-  if (password.length < 6) {
+  if (!isEditMode && !password) {
+    showAlert("Password is required when creating a user.", "error");
+    return;
+  }
+
+  if (password && password.length < 6) {
     showAlert("Password must be at least 6 characters.", "error");
     return;
   }
@@ -99,17 +199,23 @@ async function handleSubmit(e) {
     return;
   }
 
-  var payload = { name: name, email: email, password: password, role: role };
+  var payload = { name: name, email: email, role: role };
   if (branch) payload.branch = branch;
   if (phone) payload.phone = phone;
+  if (password) payload.password = password;
 
   var btn = document.getElementById("submit-btn");
   btn.disabled = true;
-  btn.textContent = "Registering...";
+  btn.textContent = isEditMode ? "Updating..." : "Registering...";
 
   try {
-    var res = await fetch(API_BASE + "/users/register", {
-      method: "POST",
+    var endpoint = isEditMode
+      ? API_BASE + "/users/" + encodeURIComponent(editUserId)
+      : API_BASE + "/users/register";
+    var method = isEditMode ? "PUT" : "POST";
+
+    var res = await fetch(endpoint, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + token
@@ -119,11 +225,16 @@ async function handleSubmit(e) {
     var data = await res.json();
 
     if (!res.ok) {
-      showAlert(data.message || "Failed to register user.", "error");
+      showAlert(data.message || "Failed to save user.", "error");
       return;
     }
 
-    showAlert("User registered successfully! Redirecting...", "success");
+    showAlert(
+      isEditMode
+        ? "User updated successfully! Redirecting..."
+        : "User registered successfully! Redirecting...",
+      "success"
+    );
     setTimeout(function () {
       window.location.href = getUserManagementPath(callerRole);
     }, 1500);
@@ -131,7 +242,7 @@ async function handleSubmit(e) {
     showAlert("Network error. Please check your connection.", "error");
   } finally {
     btn.disabled = false;
-    btn.textContent = "Register User";
+    btn.textContent = isEditMode ? "Update User" : "Register User";
   }
 }
 
@@ -153,6 +264,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var callerRole = decoded.role;
   var callerBranch = decoded.branch || "";
 
+  setFormMode();
+
   // Fix Back link destination by role (Director vs Manager).
   var backLink = document.querySelector(".back-link");
   if (backLink) {
@@ -173,6 +286,10 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     showAlert("Access denied: only Managers and Directors can add users.", "error");
     document.getElementById("submit-btn").disabled = true;
+  }
+
+  if (isEditMode) {
+    loadUserForEdit(token, callerRole, callerBranch);
   }
 
   document.getElementById("addUserForm").addEventListener("submit", handleSubmit);

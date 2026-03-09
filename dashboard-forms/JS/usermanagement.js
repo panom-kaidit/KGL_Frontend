@@ -164,50 +164,13 @@ async function loadBranchUsers() {
   }
 }
 
-async function editUser(userId) {
-  const user = allUsers.find(function (item) {
-    return item._id === userId;
-  });
-
-  if (!user) {
+function editUser(userId) {
+  if (!userId) {
     showAlert("User not found.", "error");
     return;
   }
 
-  const name = window.prompt("Edit name:", user.name || "");
-  if (name === null) return;
-
-  const email = window.prompt("Edit email:", user.email || "");
-  if (email === null) return;
-
-  const phone = window.prompt("Edit phone:", user.phone || "");
-  if (phone === null) return;
-
-  try {
-    const res = await fetch(API_BASE + "/users/" + encodeURIComponent(userId), {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + getToken()
-      },
-      body: JSON.stringify({
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim()
-      })
-    });
-
-    const body = await readJsonSafely(res);
-    if (!res.ok) {
-      showAlert((body && body.message) || "Failed to update user.", "error");
-      return;
-    }
-
-    showAlert("User updated successfully.", "success");
-    loadBranchUsers();
-  } catch {
-    showAlert("Network error. Please check your connection.", "error");
-  }
+  window.location.href = "./addUser.html?userId=" + encodeURIComponent(userId);
 }
 
 async function deleteUser(userId) {
