@@ -167,8 +167,8 @@ async function handleSubmit(e) {
     return;
   }
 
-  if (password && password.length < 6) {
-    showAlert("Password must be at least 6 characters.", "error");
+  if (password && password.length < 8) {
+    showAlert("Password must be at least 8 characters.", "error");
     return;
   }
 
