@@ -60,7 +60,7 @@ form.addEventListener("submit", async function (event) {
     event.preventDefault();
     clearMessage();
 
-    const email = userMail.value.trim();
+    const email = userMail.value.trim().toLowerCase();
     const password = passCode.value.trim();
 
     try {

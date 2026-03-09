@@ -149,7 +149,7 @@ async function handleSubmit(e) {
 
   var name = document.getElementById("name").value.trim();
   var email = document.getElementById("email").value.trim();
-  var password = document.getElementById("password").value;
+  var password = document.getElementById("password").value.trim();
   var phone = document.getElementById("phone").value.trim();
   var role = document.getElementById("role").value;
   var branch = document.getElementById("branch").value;
