@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("credit-sales-agent").value = userName;
   document.getElementById("credit-sales-agent").readOnly = true;
 
+  setDefaultSalesDates();
   wireFormEvents();
   showForm("cash");
 
@@ -54,6 +55,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     showSalesMessage("Failed to load branch products. Please refresh.", "error");
   }
 });
+
+function setDefaultSalesDates() {
+  const today = new Date().toISOString().split("T")[0];
+  const saleDateInput = document.getElementById("sale-date");
+  const dispatchDateInput = document.getElementById("dispatch-date");
+
+  if (saleDateInput && !saleDateInput.value) {
+    saleDateInput.value = today;
+  }
+
+  if (dispatchDateInput && !dispatchDateInput.value) {
+    dispatchDateInput.value = today;
+  }
+}
 
 function wireFormEvents() {
   const cashForm = document.getElementById("cash-form");
@@ -547,4 +562,3 @@ function escapeHtml(value) {
 function escapeAttr(value) {
   return escapeHtml(value).replace(/'/g, "&#39;");
 }
-
