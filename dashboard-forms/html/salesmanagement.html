@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Management | Karibu</title>
+    <link rel="icon" type="image/png" href="../../images/logo/karibu-icon.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../CSS/goSell.css" />
+    <link rel="stylesheet" href="../CSS/sellersDashboard.css" />
+    <link rel="stylesheet" href="../CSS/layout.css" />
+    <link rel="stylesheet" href="../CSS/responsive.css" />
+    <link rel="stylesheet" href="../CSS/tables.css" />
+  </head>
+
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="logo">
+          <img src="../../images/logo/karibu-logo.png" alt="Karibu Logo" />
+        </div>
+
+        <ul class="nav_menu" id="navMenu"></ul>
+      </aside>
+
+      <main class="main--content">
+        <div class="header--wrapper">
+          <div class="header--title">
+            <span>Sales</span>
+            <h2>Sales Management</h2>
+          </div>
+        </div>
+
+        <section class="sales--history">
+          <h3 class="main--title">Sales Records</h3>
+
+          <div class="type-filter-bar">
+            <button type="button" id="viewCredit" class="type-btn active">
+              <i class="fas fa-credit-card"></i> Credit Sales
+            </button>
+            <button type="button" id="viewCash" class="type-btn">
+              <i class="fas fa-money-bill-wave"></i> Cash Sales
+            </button>
+          </div>
+
+          <div class="sales-action" id="creditActionBar">
+            <button
+              type="button"
+              class="sell-form"
+              onclick="window.location.href='./creditsform.html'"
+            >
+              <i class="fas fa-pen"></i>
+              <span>Update Credit Sales</span>
+            </button>
+          </div>
+
+          <p id="salesManagementCount" class="result-count"></p>
+
+          <div class="table-container">
+            <table class="sales-table">
+              <thead id="salesManagementHead"></thead>
+              <tbody id="salesManagementBody">
+                <tr class="loading-row">
+                  <td colspan="9" class="text-center">Loading sales records...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="salesManagementEmpty" class="no-results no-results--hidden">
+            <i class="fas fa-inbox"></i>
+            <h3>No sales found</h3>
+            <p>No sales records are available for this branch.</p>
+          </div>
+        </section>
+      </main>
+
+      <script src="../JS/salesmanagement.js"></script>
+      <script src="../JS/logout.js"></script>
+    </div>
+
+    <script src="../JS/apiConfig.js"></script>
+  </body>
+</html>
