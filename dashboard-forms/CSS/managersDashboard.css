@@ -189,20 +189,5 @@ table:not(.sales-table) th {
 
 .status.green { background: #43a047; }
 .status.yellow { background: #f9a825; }
-
-
-/* ================= MOBILE RESPONSIVENESS ================= */
-/* Tablets */
-
-
-/* Phones */
-
-/* Side bar hinde*/
-
-
-/* Topbar to add new procurements */
-
-
-/* Beginner Friendly: Make table scrollable on mobile */
-
+.status.red { background: #e53935; }
 
