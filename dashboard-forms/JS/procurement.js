@@ -1,287 +1,415 @@
-// Base API URL - Update this to match your backend server URL
-const API_BASE_URL = window.API_URL || "https://kgl-project-3g6j.onrender.com"; // Must match the port your backend is running on
+const API_BASE_URL = window.API_URL || "https://kgl-project-3g6j.onrender.com";
 
-// Form elements will be initialized after DOM is ready
+const FARM_CONTACTS = {
+  "Maganjo Farm": "0700000001",
+  "Matugga Farm": "0700000002"
+};
+
 let procurementForm;
-let supplierNameInput;
+let formErrors;
+let supplierSelect;
+let supplierOtherGroup;
+let supplierOtherInput;
 let supplierContactInput;
 let purchaseDateInput;
 let produceTimeInput;
-let invoiceNumberInput;
 let productNameInput;
 let productCategoryInput;
 let quantityInput;
 let unitPriceInput;
 let sellingPriceInput;
-let totalAmountInput; // legacy alias, will point to sellingPriceInput
+let lastPriceEdited = "unit";
 
-// Initialize form elements when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-  procurementForm = document.querySelector('.form-box');
-  supplierNameInput = document.getElementById('supplier-name');
-  supplierContactInput = document.getElementById('supplier-contact');
-  purchaseDateInput = document.getElementById('purchase-date');
-  produceTimeInput = document.getElementById('produce-time');
-  invoiceNumberInput = document.getElementById('invoice-number');
-  productNameInput = document.getElementById('product-name');
-  productCategoryInput = document.getElementById('product-category');
-  quantityInput = document.getElementById('quantity');
-  unitPriceInput = document.getElementById('unit-price');
-  sellingPriceInput = document.getElementById('selling-price');
-  // backwards compatibility alias
-  totalAmountInput = sellingPriceInput;
+document.addEventListener("DOMContentLoaded", function () {
+  procurementForm = document.querySelector(".form-box");
+  formErrors = document.getElementById("formErrors");
+  supplierSelect = document.getElementById("supplier-select");
+  supplierOtherGroup = document.getElementById("supplier-other-group");
+  supplierOtherInput = document.getElementById("supplier-name-other");
+  supplierContactInput = document.getElementById("supplier-contact");
+  purchaseDateInput = document.getElementById("purchase-date");
+  produceTimeInput = document.getElementById("produce-time");
+  productNameInput = document.getElementById("product-name");
+  productCategoryInput = document.getElementById("product-category");
+  quantityInput = document.getElementById("quantity");
+  unitPriceInput = document.getElementById("unit-price");
+  sellingPriceInput = document.getElementById("selling-price");
 
-  // Add form submission handler
-  if (procurementForm) {
-    procurementForm.addEventListener('submit', handleFormSubmit);
+  if (!procurementForm) {
+    return;
   }
 
-  // Setup auto-calculation
-  if (quantityInput && unitPriceInput && totalAmountInput) {
-    const calculateTotal = () => {
-      const quantity = parseFloat(quantityInput.value) || 0;
-      const unitPrice = parseFloat(unitPriceInput.value) || 0;
-      const total = quantity * unitPrice;
-      totalAmountInput.value = total.toFixed(2);
-    };
-
-    quantityInput.addEventListener('change', calculateTotal);
-    unitPriceInput.addEventListener('change', calculateTotal);
-    quantityInput.addEventListener('input', calculateTotal);
-    unitPriceInput.addEventListener('input', calculateTotal);
-  }
+  setTodayAsPurchaseDate();
+  updateSupplierFields();
+  setupSupplierEvents();
+  setupCalculationEvents();
+  setupValidationEvents();
+  procurementForm.addEventListener("submit", handleFormSubmit);
 });
 
-// Form submission handler
-async function handleFormSubmit(e) {
-  e.preventDefault();
-  console.log('Form submitted');
-  
+function setTodayAsPurchaseDate() {
+  if (!purchaseDateInput) {
+    return;
+  }
+
+  purchaseDateInput.value = new Date().toISOString().split("T")[0];
+}
+
+function getSupplierName() {
+  if (!supplierSelect) {
+    return "";
+  }
+
+  if (supplierSelect.value === "Other") {
+    return supplierOtherInput.value.trim();
+  }
+
+  return supplierSelect.value.trim();
+}
+
+function updateSupplierFields() {
+  if (!supplierSelect || !supplierContactInput) {
+    return;
+  }
+
+  const selectedSupplier = supplierSelect.value;
+  const isOtherSupplier = selectedSupplier === "Other";
+
+  supplierOtherGroup.classList.toggle("hidden", !isOtherSupplier);
+
+  if (isOtherSupplier) {
+    supplierOtherInput.required = true;
+    supplierContactInput.readOnly = false;
+    if (Object.values(FARM_CONTACTS).indexOf(supplierContactInput.value) !== -1) {
+      supplierContactInput.value = "";
+    }
+    return;
+  }
+
+  supplierOtherInput.required = false;
+  supplierOtherInput.value = "";
+
+  if (FARM_CONTACTS[selectedSupplier]) {
+    supplierContactInput.value = FARM_CONTACTS[selectedSupplier];
+    supplierContactInput.readOnly = true;
+  } else {
+    supplierContactInput.readOnly = false;
+  }
+}
+
+function setupSupplierEvents() {
+  if (!supplierSelect) {
+    return;
+  }
+
+  supplierSelect.addEventListener("change", function () {
+    updateSupplierFields();
+    refreshErrors();
+  });
+
+  supplierOtherInput.addEventListener("input", refreshErrors);
+  supplierContactInput.addEventListener("input", refreshErrors);
+}
+
+function setupCalculationEvents() {
+  if (!quantityInput || !unitPriceInput || !sellingPriceInput) {
+    return;
+  }
+
+  quantityInput.addEventListener("input", function () {
+    if (lastPriceEdited === "selling") {
+      updateUnitPriceFromSellingPrice();
+    } else {
+      updateSellingPriceFromUnitPrice();
+    }
+    refreshErrors();
+  });
+
+  unitPriceInput.addEventListener("input", function () {
+    lastPriceEdited = "unit";
+    updateSellingPriceFromUnitPrice();
+    refreshErrors();
+  });
+
+  sellingPriceInput.addEventListener("input", function () {
+    lastPriceEdited = "selling";
+    updateUnitPriceFromSellingPrice();
+    refreshErrors();
+  });
+}
+
+function updateSellingPriceFromUnitPrice() {
+  const quantity = Number(quantityInput.value);
+  const unitPrice = Number(unitPriceInput.value);
+
+  if (!quantity || !unitPrice) {
+    return;
+  }
+
+  sellingPriceInput.value = (quantity * unitPrice).toFixed(2);
+}
+
+function updateUnitPriceFromSellingPrice() {
+  const quantity = Number(quantityInput.value);
+  const sellingPrice = Number(sellingPriceInput.value);
+
+  if (!quantity || !sellingPrice) {
+    return;
+  }
+
+  unitPriceInput.value = (sellingPrice / quantity).toFixed(2);
+}
+
+function setupValidationEvents() {
+  const fields = [
+    purchaseDateInput,
+    produceTimeInput,
+    productNameInput,
+    productCategoryInput,
+    quantityInput,
+    unitPriceInput,
+    sellingPriceInput,
+    document.getElementById("branch")
+  ];
+
+  fields.forEach(function (field) {
+    if (!field) {
+      return;
+    }
+
+    field.addEventListener("input", refreshErrors);
+    field.addEventListener("change", refreshErrors);
+  });
+}
+
+function showMessages(messages, type) {
+  if (!formErrors) {
+    return;
+  }
+
+  if (!messages || !messages.length) {
+    formErrors.className = "error-container";
+    formErrors.innerHTML = "";
+    return;
+  }
+
+  formErrors.className = "error-container " + type;
+  formErrors.innerHTML =
+    "<ul>" +
+    messages
+      .map(function (message) {
+        return "<li>" + escapeHtml(message) + "</li>";
+      })
+      .join("") +
+    "</ul>";
+}
+
+function refreshErrors() {
+  if (!formErrors || !formErrors.innerHTML.trim()) {
+    return;
+  }
+
+  showMessages(validateForm(), "error");
+}
+
+function validateForm() {
+  const errors = [];
+  const supplierName = getSupplierName();
+  const supplierContact = supplierContactInput.value.trim();
+  const productName = productNameInput.value.trim();
+  const productCategory = productCategoryInput.value.trim();
+  const quantity = Number(quantityInput.value);
+  const unitPrice = unitPriceInput.value.trim();
+  const sellingPrice = sellingPriceInput.value.trim();
+
+  const supplierPattern = /^[A-Za-z0-9 .,'&-]{2,}$/;
+  const productPattern = /^[A-Za-z0-9 .,'&-]{2,}$/;
+  const categoryPattern = /^[A-Za-z ]{2,}$/;
+  const phonePattern = /^[0-9+]{10,15}$/;
+
+  if (!supplierSelect.value) {
+    errors.push("Please select a supplier.");
+  } else if (!supplierName) {
+    errors.push("Please enter the supplier name.");
+  } else if (!supplierPattern.test(supplierName)) {
+    errors.push("Supplier name must contain valid letters or numbers.");
+  }
+
+  if (!supplierContact) {
+    errors.push("Please provide the supplier contact.");
+  } else if (!phonePattern.test(supplierContact)) {
+    errors.push("Please provide a valid contact phone number.");
+  }
+
+  if (!purchaseDateInput.value) {
+    errors.push("Purchase date is required.");
+  }
+
+  if (!produceTimeInput.value) {
+    errors.push("Produce time is required.");
+  }
+
+  if (!productName) {
+    errors.push("Product name is required.");
+  } else if (!productPattern.test(productName)) {
+    errors.push("Product name must contain valid letters or numbers.");
+  }
+
+  if (!productCategory) {
+    errors.push("Product category is required.");
+  } else if (!categoryPattern.test(productCategory)) {
+    errors.push("Product category must contain letters only.");
+  }
+
+  if (!quantityInput.value) {
+    errors.push("Quantity is required.");
+  } else if (Number.isNaN(quantity) || quantity < 1000) {
+    errors.push("Quantity must be at least 1000kg.");
+  }
+
+  if (!unitPrice && !sellingPrice) {
+    errors.push("Enter a unit price or a selling price.");
+  }
+
+  if (unitPrice && (Number.isNaN(Number(unitPrice)) || Number(unitPrice) < 5)) {
+    errors.push("Price must not be less than 5.");
+  }
+
+  if (sellingPrice && (Number.isNaN(Number(sellingPrice)) || Number(sellingPrice) < 5)) {
+    errors.push("Price must not be less than 5.");
+  }
+
+  return errors;
+}
+
+function buildProcurementPayload() {
+  const supplierName = getSupplierName();
+  const quantity = Number(quantityInput.value);
+  const unitPrice = Number(unitPriceInput.value);
+  const sellingPrice = Number(sellingPriceInput.value);
+
+  let finalUnitPrice = unitPrice;
+  let finalSellingPrice = sellingPrice;
+
+  if (!finalSellingPrice && quantity && finalUnitPrice) {
+    finalSellingPrice = quantity * finalUnitPrice;
+  }
+
+  if (!finalUnitPrice && quantity && finalSellingPrice) {
+    finalUnitPrice = finalSellingPrice / quantity;
+  }
+
+  if (finalUnitPrice && !unitPriceInput.value.trim()) {
+    unitPriceInput.value = finalUnitPrice.toFixed(2);
+  }
+
+  if (finalSellingPrice && !sellingPriceInput.value.trim()) {
+    sellingPriceInput.value = finalSellingPrice.toFixed(2);
+  }
+
+  return {
+    supplier_name: supplierName,
+    supplier_contact: supplierContactInput.value.trim(),
+    purchase_date: purchaseDateInput.value,
+    produce_time: produceTimeInput.value,
+    invoice_number: createInvoiceNumber(),
+    product_name: productNameInput.value.trim(),
+    product_category: productCategoryInput.value.trim(),
+    quantity: quantity,
+    unit_price: finalUnitPrice,
+    selling_price: finalSellingPrice,
+    payment_method: "",
+    payment_status: ""
+  };
+}
+
+function createInvoiceNumber() {
+  return "PROC-" + Date.now();
+}
+
+async function handleFormSubmit(event) {
+  event.preventDefault();
+
+  const errors = validateForm();
+  if (errors.length) {
+    showMessages(errors, "error");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    showMessages(["Please login first."], "error");
+    window.location.href = "../../loginform/html/login.html";
+    return;
+  }
+
   try {
-    // Get payment method
-    const paymentMethodRadios = document.querySelectorAll('input[name="payment"]');
-    let paymentMethod = '';
-    for (let radio of paymentMethodRadios) {
-      if (radio.checked) {
-        paymentMethod = radio.value || radio.parentElement.textContent.trim();
-        break;
-      }
-    }
-
-    // Get payment status
-    const paymentStatusRadios = document.querySelectorAll('input[name="payment_status"]');
-    let paymentStatus = '';
-    for (let radio of paymentStatusRadios) {
-      if (radio.checked) {
-        paymentStatus = radio.value;
-        break;
-      }
-    }
-
-    // Validate required fields with rules
-    const namePattern = /^[A-Za-z0-9 ]+$/;
-    const typePattern = /^[A-Za-z ]{2,}$/;
-    const dealerPattern = /^[A-Za-z0-9 ]{2,}$/;
-    const phonePattern = /^[0-9+]{10,15}$/;
-
-    if (!supplierNameInput.value || !namePattern.test(supplierNameInput.value)) {
-      showAlert('Supplier name must be alphanumeric and at least 1 character', 'error');
-      return;
-    }
-    if (!supplierContactInput.value || !phonePattern.test(supplierContactInput.value)) {
-      showAlert('Please provide a valid contact phone number', 'error');
-      return;
-    }
-    if (!purchaseDateInput.value) {
-      showAlert('Purchase date is required', 'error');
-      return;
-    }
-    if (!produceTimeInput.value) {
-      showAlert('Produce time is required', 'error');
-      return;
-    }
-    if (!invoiceNumberInput.value) {
-      showAlert('Invoice number is required', 'error');
-      return;
-    }
-    if (!productNameInput.value || !namePattern.test(productNameInput.value)) {
-      showAlert('Product/produce name must be alphanumeric', 'error');
-      return;
-    }
-    if (!productCategoryInput.value || !typePattern.test(productCategoryInput.value)) {
-      showAlert('Produce type must be alphabetic and at least 2 characters', 'error');
-      return;
-    }
-    if (!quantityInput.value || isNaN(quantityInput.value) || parseInt(quantityInput.value) < 100) {
-      showAlert('Tonnage must be numeric and at least 3 digits (>=100)', 'error');
-      return;
-    }
-    if (!unitPriceInput.value || isNaN(unitPriceInput.value) || parseFloat(unitPriceInput.value) < 10000) {
-      showAlert('Cost must be numeric and at least 5 digits (>=10000)', 'error');
-      return;
-    }
-    // Branch is not validated client-side — it is enforced server-side from JWT.
-
-    // Calculate selling price if empty
-    let sellingPrice = sellingPriceInput.value;
-    if (!sellingPrice || sellingPrice === 0) {
-      sellingPrice = parseFloat(quantityInput.value) * parseFloat(unitPriceInput.value);
-    }
-
-    // FIXED (LOGIC-03 / BRANCH-01): Branch is no longer sent from the client.
-    // The server reads branch from the JWT (req.user.branch), so including it here
-    // would be redundant and could allow branch spoofing if the server were misconfigured.
-    const formData = {
-      supplier_name: supplierNameInput.value,
-      supplier_contact: supplierContactInput.value,
-      purchase_date: purchaseDateInput.value,
-      produce_time: produceTimeInput.value,
-      invoice_number: invoiceNumberInput.value,
-      product_name: productNameInput.value,
-      product_category: productCategoryInput.value || '',
-      quantity: parseFloat(quantityInput.value),
-      unit_price: parseFloat(unitPriceInput.value),
-      selling_price: parseFloat(sellingPrice),
-      payment_method: paymentMethod,
-      payment_status: paymentStatus
-    };
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      showAlert('Please login first', 'error');
-      window.location.href = '../../loginform/html/login.html';
-      return;
-    }
-
-    const response = await fetch(`${API_BASE_URL}/procurement`, {
-      method: 'POST',
+    const response = await fetch(API_BASE_URL + "/procurement", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(buildProcurementPayload())
     });
 
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.message || 'Failed to submit procurement form');
+      showMessages([result.message || "Failed to submit procurement form."], "error");
+      return;
     }
 
-    showAlert('Procurement record created successfully!', 'success');
-
-    // Reset form
+    showMessages(["Procurement record created successfully."], "success");
     procurementForm.reset();
+    lastPriceEdited = "unit";
+    setTodayAsPurchaseDate();
+    updateSupplierFields();
 
-    // Optional: Redirect to dashboard after successful submission
-    setTimeout(() => {
-      window.location.href = '../html/managersDashboard.html';
+    setTimeout(function () {
+      window.location.href = "../html/managersDashboard.html";
     }, 2000);
-
   } catch (error) {
-    console.error('Error submitting procurement form:', error);
-    showAlert(error.message || 'Error submitting procurement form', 'error');
+    showMessages([error.message || "Error submitting procurement form."], "error");
   }
 }
 
-// Alert function to show messages to user
-function showAlert(message, type = 'info') {
-  // Create alert container
-  const alertContainer = document.createElement('div');
-  alertContainer.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 4px;
-    font-weight: 500;
-    z-index: 1000;
-    animation: slideIn 0.3s ease-in-out;
-    max-width: 400px;
-  `;
-
-  // Set color based on alert type
-  const colors = {
-    success: '#4CAF50',
-    error: '#f44336',
-    info: '#2196F3',
-    warning: '#ff9800'
-  };
-
-  const textColor = '#fff';
-  const backgroundColor = colors[type] || colors.info;
-
-  alertContainer.style.backgroundColor = backgroundColor;
-  alertContainer.style.color = textColor;
-  alertContainer.textContent = message;
-
-  // Add CSS animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideIn {
-      from {
-        transform: translateX(400px);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    @keyframes slideOut {
-      from {
-        transform: translateX(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(400px);
-        opacity: 0;
-      }
-    }
-  `;
-  
-  if (!document.querySelector('style[data-alert]')) {
-    style.setAttribute('data-alert', 'true');
-    document.head.appendChild(style);
-  }
-
-  document.body.appendChild(alertContainer);
-
-  // Auto-remove after 3 seconds
-  setTimeout(() => {
-    alertContainer.style.animation = 'slideOut 0.3s ease-in-out';
-    setTimeout(() => {
-      alertContainer.remove();
-    }, 300);
-  }, 3000);
-}
-
-// Fetch and display procurement records (optional - for viewing submitted records)
 async function fetchProcurementRecords() {
   try {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return [];
+    }
 
-    const response = await fetch(`${API_BASE_URL}/procurement`, {
-      method: 'GET',
-      headers: { 'Authorization': `Bearer ${token}` }
+    const response = await fetch(API_BASE_URL + "/procurement", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
     });
 
-    if (!response.ok) throw new Error('Failed to fetch procurement records');
+    if (!response.ok) {
+      throw new Error("Failed to fetch procurement records");
+    }
 
     const result = await response.json();
-    return result.data;
-
+    return result.data || [];
   } catch (error) {
-    console.error('Error fetching procurement records:', error);
+    console.error("Error fetching procurement records:", error);
+    return [];
   }
 }
 
-// Export functions for use in other files if needed
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = {
-    fetchProcurementRecords,
-    showAlert
-  };
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    fetchProcurementRecords
+  };
+}

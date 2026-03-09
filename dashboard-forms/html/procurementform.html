@@ -6,6 +6,39 @@
     <title>Procurement Form</title>
     <link rel="icon" type="image/png" href="../../images/logo/karibu-icon.png">
     <link rel="stylesheet" href="../CSS/procurementform.css">
+    <style>
+        .error-container {
+            display: none;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .error-container.error {
+            display: block;
+            background: #fdecea;
+            border: 1px solid #f5c2c7;
+            color: #b42318;
+        }
+
+        .error-container.success {
+            display: block;
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            color: #1b5e20;
+        }
+
+        .error-container ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .supplier-other.hidden {
+            display: none;
+        }
+    </style>
 
     <link rel='stylesheet' href='../CSS/responsive.css' />
 </head>
@@ -22,26 +55,38 @@
         </div>
 
         <!-- Form -->
-        <form class="form-box">
+        <form class="form-box" novalidate>
+
+            <div id="formErrors" class="error-container" role="alert"></div>
 
             <div class="form-group">
-                <label for="supplier-name">Supplier Name</label>
-                <input class="input" type="text" id="supplier-name" name="supplier_name" placeholder="Supplier Name" required>
+                <label for="supplier-select">Dealer Name</label>
+                <select class="input" id="supplier-select" name="supplier_select" required>
+                    <option value="" disabled selected>Select supplier</option>
+                    <option value="Maganjo Farm">Maganjo Farm</option>
+                    <option value="Matugga Farm">Matugga Farm</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group supplier-other hidden" id="supplier-other-group">
+                <label for="supplier-name-other">Other Supplier Name</label>
+                <input class="input" type="text" id="supplier-name-other" name="supplier_name_other" placeholder="Enter supplier name">
             </div>
 
             <div class="form-group">
-                <label for="supplier-contact">Supplier Contact</label>
+                <label for="supplier-contact">Dealer Contact</label>
                 <input class="input" type="tel" id="supplier-contact" name="supplier_contact" placeholder="Phone number" required>
             </div>
 
             <div class="form-group">
                 <label for="purchase-date">Purchase Date</label>
-                <input class="input" type="date" id="purchase-date" name="purchase_date" required>
+                <input class="input" type="date" id="purchase-date" name="purchase_date" required readonly>
             </div>
 
             <div class="form-group">
-                <label for="invoice-number">Invoice Number</label>
-                <input class="input" type="text" id="invoice-number" name="invoice_number" placeholder="Invoice No." required>
+                <label for="produce-time">Time of produce</label>
+                <input class="input" type="time" id="produce-time" name="produce_time" required>
             </div>
 
             <div class="form-group">
@@ -56,7 +101,7 @@
 
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input class="input" type="number" id="quantity" name="quantity" min="1" required>
+                <input class="input" type="number" id="quantity" name="quantity" min="1000" required>
             </div>
 
             <div class="form-group">
@@ -65,8 +110,8 @@
             </div>
 
             <div class="form-group">
-                <label for="produce-time">Time of produce</label>
-                <input class="input" type="time" id="produce-time" name="produce_time" required>
+                <label for="selling-price">Selling Price (UgX)</label>
+                <input class="input" type="number" id="selling-price" name="selling_price" step="0.01" placeholder="Auto / Manual">
             </div>
 
             <div class="form-group">
@@ -76,36 +121,6 @@
                     <option value="Maganjo">Maganjo</option>
                     <option value="Matugga">Matugga</option>
                 </select>
-            </div>
-
-            <div class="form-group">
-                <label for="selling-price">Selling Price (UgX)</label>
-                <input class="input" type="number" id="selling-price" name="selling_price" step="0.01" placeholder="Auto / Manual">
-            </div>
-
-            <div class="form-group">
-                <label>Payment Method</label>
-                <div class="remember">
-                    <label><input type="radio" name="payment" value="Cash"> Cash</label>
-                    <label><input type="radio" name="payment" value="Mobile Money"> Mobile Money</label>
-                    <label><input type="radio" name="payment" value="Card"> Card</label>
-                </div>
-            </div>
-
-            <!-- Payment Status -->
-            <div class="form-group">
-                <label>Payment Status</label>
-                <div class="remember">
-                    <label>
-                        <input type="radio" name="payment_status" value="paid"> Paid
-                    </label>
-                    <label>
-                        <input type="radio" name="payment_status" value="pending"> Pending
-                    </label>
-                    <label>
-                        <input type="radio" name="payment_status" value="partial"> Partial
-                    </label>
-                </div>
             </div>
 
             <!-- Submit -->
