@@ -272,7 +272,7 @@ function renderCreditTable() {
         "</td>" +
         "<td>" +
         "UGX " +
-        formatCurrency(sale.amountDue || 0) +
+        formatCurrency(getOriginalCreditAmount(sale)) +
         "</td>" +
         "<td>" +
         escapeHtml(sale.produceName || "-") +
@@ -357,6 +357,22 @@ function getAgentName(sale) {
   }
 
   return sale.salesAgent || "-";
+}
+
+function getOriginalCreditAmount(sale) {
+  const paymentHistoryTotal = Array.isArray(sale.paymentHistory)
+    ? sale.paymentHistory.reduce(function (sum, payment) {
+        return sum + Number(payment.amount || 0);
+      }, 0)
+    : 0;
+
+  const billedAmount = Number(sale.amountDue || 0) + paymentHistoryTotal;
+  if (billedAmount > 0) {
+    return billedAmount;
+  }
+
+  const derivedAmount = Number(sale.pricePerKg || 0) * Number(sale.tonnage || 0);
+  return derivedAmount > 0 ? derivedAmount : 0;
 }
 
 function formatDate(value) {
